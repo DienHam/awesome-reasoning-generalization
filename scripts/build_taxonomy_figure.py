@@ -25,21 +25,21 @@ PALETTE = {
 
 # Representative studies shown in each leaf box (one line per section).
 EXAMPLES = {
-    "training.pre": "Training-Stage Interplay; Grokking in the Wild; Axiomatic Training; Nexus; Complexity Control",
-    "training.mid": "DeepSeekMath; Biological Reasoning Models; Additional Logic Training; Reasoning Paradigms; Warm Up Before You Train",
-    "training.sft": "MEND; STEPS; Self-Improving Transformers; Theorem-SFT; Meta-RFFT; TAIL; Composable CoT; GEOSD; IGA",
-    "training.rl": "SFT Memorizes, RL Generalizes; pass@k boundary; SynLogic; RACES; h1; GraphPRM; GRAIN; CoRPO",
-    "training.hybrid": "X-Reasoner; ReasonXL; Rejuvenation; SFT-then-RL baseline audit; LUFFY; Prefix-RFT; SRFT; HPT",
-    "inference.trajectory": "Least-to-Most; Skills-in-Context; million-step decomposition; Self-Discover; Constraint-First; Test-Time Hinting",
-    "inference.compute": "PRM-guided MCTS; compute-optimal test-time scaling; error-localized scaling; latent test-time compute",
-    "inference.assessment": "Residual-stream error directions; UPAIR; thought calibration; ORCA; joint reasoner-verifier; VDS-TTT",
-    "inference.externalization": "Tool use for length transfer; Chain-of-Abstraction; TECTON; SMART; ReasoningBank; MILES",
-    "architecture.depth": "Universal and Looped Transformers; Loop, Think, & Generalize; retrofitted recurrence; PoLar; Think-at-Hard; Equilibrium Reasoners",
-    "architecture.routing": "Position Coupling; Abacus embeddings; TAPE; Randomized YaRN; attention bias calibration; RegularGPT; MORSE; sparse MoE",
-    "architecture.memory": "Rational Transductors; SST V2; fast-slow latent recurrence; Thinking States; PENCIL universal computer",
-    "analysis.behavioral": "Faith and Fate; MathGAP; Compositional-ARC; length generalization but not robustly; shortest path; GSM-Symbolic; Reversal Curse",
-    "analysis.mechanistic": "Shared circuits; decompiling to RASP; Hopping Too Late; two-hop interfaces; grokked transformers; critical windows",
-    "analysis.theoretical": "Globality barrier; shortcuts to automata; RASP-L; Curriculum II; length-generalization bounds; algebraic decomposition",
+    "training.pre": "Training-stage interplay; Grokked Transformers; Grokking in the Wild; Nexus; initialization scale; complexity control",
+    "training.mid": "DeepSeekMath; biological reasoning models; Randomized YaRN; Additional Logic Training; reasoning paradigms",
+    "training.sft": "MEND; STEPS; Chain-of-Meta-Thought; Composable CoT; Meta-RFFT; RP-OPSD; GEOSD",
+    "training.rl": "SFT vs. RL; SynLogic; h1; GraphPRM; GRAIN; Rubric-Grounded RL; CoRPO; DelTA",
+    "training.hybrid": "X-Reasoner; ReasonXL; Rejuvenation; LUFFY; Prefix-RFT; SRFT; SFT-then-RL baseline audit",
+    "inference.trajectory": "Least-to-Most; Skills-in-Context; MAKER; Self-Discover; Self-Demos; Test-Time Hinting",
+    "inference.compute": "ReST-MCTS*; PRM-guided MCTS; compute-optimal test-time scaling; error-localized test-time scaling",
+    "inference.assessment": "UPAIR; Thought Calibration; ORCA; joint reasoner-verifier; retrieval-augmented PRM",
+    "inference.externalization": "Tool-use memory for length transfer; Chain-of-Abstraction; SMART; ReasoningBank; MILES",
+    "architecture.depth": "Universal Transformer; Looped Transformers; Loop, Think, & Generalize; PoLar; Think-at-Hard",
+    "architecture.routing": "Position Coupling; Abacus; TAPE; RegularGPT; attention bias calibration; MORSE; sparse mixture-of-experts",
+    "architecture.memory": "Rational Transductors; SST V2; fast-slow latent recurrence; Thinking States",
+    "analysis.behavioral": "Faith and Fate; compositionality gap; length generalization but not robustly; depth generalization; Reasoning or Reciting; Reversal Curse",
+    "analysis.mechanistic": "Shared circuits; Is grokking worthwhile?; Hopping Too Late; Grokked Transformers; RL heals OOD forgetting",
+    "analysis.theoretical": "Globality barrier; shortcuts to automata; RASP-L; length-generalization bounds; quantitative bounds",
 }
 
 FIGURE_SECTION_NAMES = {
@@ -214,9 +214,9 @@ def build_svg() -> str:
 
     total, in_survey, years = corpus_counts()
     footer = (
-        f"Corpus: {total} studies ({in_survey} discussed in the survey + {total - in_survey} from the same screening)  •  "
+        f"List: {total} studies ({in_survey} discussed in the survey + {total - in_survey} from the same screening)  •  "
         f"2023 and earlier: {years['earlier']}  •  2024: {years['2024']}  •  2025: {years['2025']}  •  2026: {years['2026']}  "
-        f"•  Updated {date(2026, 10, 7).isoformat()}"
+        f"•  Updated {date(2026, 10, 11).isoformat()}"
     )
     out.append("")
     out.append(text(WIDTH - 20, height - 16, footer, "tiny", anchor="end"))

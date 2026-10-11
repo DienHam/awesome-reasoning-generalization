@@ -1,8 +1,9 @@
 """Taxonomy of the survey, shared by the README and figure builders.
 
-The structure follows the section and paragraph headings of the survey body (Sections 3-6).
-Each paper in ``data/paper_manifest.tsv`` points to one leaf through its ``taxonomy_id``
-(``pillar.section.leaf``); supervised fine-tuning leaves additionally carry a subgroup.
+The structure follows Figure 1 and the section and paragraph headings of the survey (Sections 3-6).
+Each paper in ``data/paper_manifest.tsv`` points to a leaf through its ``taxonomy_id``
+(``pillar.section.leaf``). Studies that the survey assigns to a section as a whole rather than to
+one of its leaves use ``pillar.section``. Supervised fine-tuning leaves also carry a subgroup.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ class Section:
     leaves: tuple[Leaf, ...]
     figure_name: str = ""
     parent: str = ""
+    general_label: str = ""
 
 
 @dataclass(frozen=True)
@@ -45,19 +47,19 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "pre",
                 "Pre-Training",
-                "Pre-training sets the reasoning primitives that later stages can recombine but can hardly supply.",
+                "Pre-training provides the model with its initial knowledge and reasoning primitives.",
                 (
-                    Leaf("data", "Data Curation", "Control what the corpus contains: coverage of the required primitives and the share of facts that must be inferred rather than recalled."),
-                    Leaf("opt", "Optimizer Design", "Change how the corpus is fit, since solutions with equal training loss can behave differently out of distribution."),
+                    Leaf("data", "Data Curation", "Control what the corpus contains: the primitives that later compositions require and the share of facts that must be inferred rather than stated."),
+                    Leaf("opt", "Optimizer Design", "Change how the model fits the same corpus, by aligning gradients across data sources or by favoring primitives over memorization."),
                 ),
             ),
             Section(
                 "mid",
                 "Mid-Training",
-                "An intermediate stage before task adaptation, so that post-training does not start out of distribution.",
+                "A stage between pre-training and task-specific adaptation that narrows the gap between their distributions and supplies skills the target tasks require.",
                 (
-                    Leaf("cpt", "Continued Pre-Training", "Next-token prediction on raw text from an under-represented domain."),
-                    Leaf("ift", "Intermediate Fine-Tuning", "Training on solved problems that need no domain knowledge, so that the acquired reasoning transfers and prepares later RL."),
+                    Leaf("cpt", "Continued Pre-Training", "Next-token prediction on raw text from a domain, or a positional range, under-represented in pre-training."),
+                    Leaf("ift", "Intermediate Fine-Tuning", "Training on solved problems that need no domain knowledge, so that the acquired reasoning transfers and prepares later training."),
                 ),
             ),
             Section(
@@ -65,7 +67,7 @@ TAXONOMY: tuple[Pillar, ...] = (
                 "Post-Training: Supervised Fine-Tuning",
                 "Imitation of demonstrations, which tends to absorb spurious surface correlations unless the problems, solutions, or objective are changed.",
                 (
-                    Leaf("problem", "Problem-Level Methods", "Represent the anticipated test shift among the training problems.", ("Problem rewriting", "Problem generation")),
+                    Leaf("problem", "Problem-Level Methods", "Represent the anticipated test shift among the training problems, leaving no single surface pattern to memorize.", ("Problem rewriting", "Problem generation", "Difficulty curriculum")),
                     Leaf("solution", "Solution-Level Methods", "Rewrite the imitated solutions, since imitation generalizes only as far as its target exposes a reusable procedure.", ("Abstract solutions", "Stepwise solutions")),
                     Leaf("objective", "Objective-Level Methods", "Change the loss so that what would not hold under shift contributes less to the update.", ("Teacher-based objectives", "Regularization-based objectives")),
                 ),
@@ -75,15 +77,15 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "rl",
                 "Post-Training: Reinforcement Learning",
-                "Rewards replace reference solutions; transfer depends on the practiced environments, the rewarded behavior, and the update rule, and stays bounded by the base model.",
+                "Rewards replace reference solutions. RL reportedly transfers where SFT degrades, yet its gains stay bounded by pre-training and by the trained depth.",
                 (
-                    Leaf("scope", "Scope and Limits of RL Transfer", "Controlled evidence on when RL transfers where SFT degrades, and on the base-model and depth limits of that transfer."),
-                    Leaf("env", "Environment Design", "Change the problems and checkers the model practices on: generated puzzles, composed environments, chained horizons, games, and controllers."),
-                    Leaf("reward", "Reward Design", "Change what is rewarded beyond the final answer: process, structure, abstraction, cross-lingual consistency, and diversity."),
-                    Leaf("policy", "Policy Optimization", "Change how rewards become updates: advantage correction, external solutions, and gradient or sharpness regularization."),
+                    Leaf("env", "Environment Design", "Change the problems and checkers the model practices on: synthesis of checkable problems, composition of environments, and chaining of short problems into longer horizons."),
+                    Leaf("reward", "Reward Design", "Reward properties of the reasoning, not only the final answer: process rewards, and rewards beyond correctness for abstract structure, LLM-as-a-judge verification, and solution diversity."),
+                    Leaf("policy", "Policy Optimization", "Modify the policy update itself: advantage modification, token weighting, and gradient regularization."),
                 ),
                 figure_name="RL",
                 parent="Post-Training",
+                general_label="Evidence on RL transfer",
             ),
             Section(
                 "hybrid",
@@ -101,41 +103,41 @@ TAXONOMY: tuple[Pillar, ...] = (
     Pillar(
         "inference",
         "Inference for Generalization",
-        "How can a fixed model be deployed on unfamiliar problems by changing computation at test time, and where does that stop helping?",
+        "How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping?",
         (
             Section(
                 "trajectory",
                 "Trajectory Restructuring",
-                "Impose structural priors on the reasoning trajectory without updating weights.",
+                "Organize free-form generation without updating model weights.",
                 (
-                    Leaf("decomposition", "Structural Decomposition", "Split long or hard problems into units that are solved in sequence or by independent micro-steps."),
-                    Leaf("injection", "Upfront Structural Injection", "Fix constraints, a task-specific procedure, query-specific demonstrations, or hints before reasoning begins."),
+                    Leaf("decomposition", "Structural Decomposition", "Break complex reasoning into manageable steps, solved in sequence, by micro-agents, or with predefined atomic skills."),
+                    Leaf("injection", "Upfront Structural Injection", "Constrain generation in advance: restrict valid answers, construct task-specific procedures, synthesize query-specific demonstrations, or supply hints."),
                 ),
             ),
             Section(
                 "compute",
                 "Compute Scaling",
-                "Allocate additional test-time compute to explore alternative paths or to revise defective ones.",
+                "When one trajectory is insufficient, use extra test-time compute to explore alternatives or revise errors.",
                 (
-                    Leaf("search", "Search Expansion and Allocation", "Direct search toward promising branches and balance exploration against revision by estimated difficulty."),
-                    Leaf("revision", "Targeted Revision", "Concentrate computation on localized faulty steps instead of regenerating the whole solution."),
+                    Leaf("search", "Search Expansion and Allocation", "Guide exploration with process-level signals and allocate compute by estimated difficulty."),
+                    Leaf("revision", "Targeted Revision", "Concentrate computation on faulty reasoning steps instead of regenerating the whole solution."),
                 ),
             ),
             Section(
                 "assessment",
                 "State Assessment",
-                "Decide which intermediate reasoning states remain trustworthy under distribution shift.",
+                "Estimate the reliability of intermediate reasoning to guide selection or further computation.",
                 (
-                    Leaf("internal", "Internal State Assessment", "Use hidden-state and uncertainty signals to continue, switch strategy, stop, or recalibrate online."),
-                    Leaf("verifier", "Verifier-Mediated Assessment", "Use auxiliary verifiers to select candidates or to build pseudo-labels for test-time training."),
+                    Leaf("internal", "Internal State Assessment", "Residual-stream trajectories, uncertainty-progress alignment, calibrated stopping, and online recalibration under shift."),
+                    Leaf("verifier", "Verifier-Mediated Assessment", "Auxiliary verifiers or process reward models for candidate selection or test-time adaptation, which may themselves generalize poorly."),
                 ),
             ),
             Section(
                 "externalization",
                 "Inference-Time Externalization",
-                "Move working state, exact operations, or accumulated experience outside a single forward reasoning process.",
+                "Give inference access to working state or computation beyond the model's internal state.",
                 (
-                    Leaf("within", "Within-Episode Externalization", "External memory, abstract reasoning with tool-supplied values, and decisions about when a tool is needed."),
+                    Leaf("within", "Within-Episode Externalization", "Interactive memory, abstract reasoning with tool-supplied values, and decisions about when a tool is needed."),
                     Leaf("cross", "Cross-Episode Externalization", "Persistent memories of strategies distilled from earlier successes and failures, retrieved for later tasks."),
                 ),
             ),
@@ -144,22 +146,21 @@ TAXONOMY: tuple[Pillar, ...] = (
     Pillar(
         "architecture",
         "Architecture for Generalization",
-        "Which computational structures let a learned operation be reused at greater length, depth, or compositional complexity?",
+        "Which computational structures let a learned operation be reused when problems grow longer or combine familiar steps in new ways?",
         (
             Section(
                 "depth",
                 "Recurrent Depth",
-                "Apply a shared transformation repeatedly within one prediction.",
+                "Apply a shared transformation repeatedly, increasing computation without a separate parameter set at each depth.",
                 (
-                    Leaf("sharing", "Weight Sharing", "Universal and looped transformers, recurrence over facts or tool calls, and recurrent blocks retrofitted into pretrained models."),
-                    Leaf("adaptive", "Adaptive Computation", "Learned controllers that choose how many iterations, layers, or latent passes an input receives."),
-                    Leaf("stability", "Stable Recurrent Dynamics", "Fixed points, attractors, and energy descent that keep extra iterations useful instead of drifting."),
+                    Leaf("sharing", "Weight Sharing", "Universal and looped transformers, recurrence over facts, graphs, or tool calls, and shared blocks retrofitted into pretrained models."),
+                    Leaf("adaptive", "Adaptive Computation", "Learned control of how many iterations, layers, or latent passes an input receives, and the stability that keeps extra iterations from drifting."),
                 ),
             ),
             Section(
                 "routing",
                 "Information Routing",
-                "Specify how tokens are addressed, which dependencies attention reaches, and which modules process them.",
+                "Determine how tokens are addressed, which dependencies attention can access, and which components process them.",
                 (
                     Leaf("position", "Positional Encoding", "Encode each token's computational role so that alignment survives longer or differently composed inputs."),
                     Leaf("attention", "Attention Patterns", "Constrain which intermediate results later computation can retrieve, preserving local operations at longer lengths."),
@@ -169,7 +170,7 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "memory",
                 "Recurrent Memory",
-                "Carry an explicit state across tokens or reasoning chunks so later computation can reuse earlier results.",
+                "Carry an internal state across computation steps so that later steps can reuse earlier information.",
                 (
                     Leaf("token", "Token-Level Recurrence", "Each input or observation updates a carried state."),
                     Leaf("chunk", "Chunk-Level Recurrence", "A compact state summarizes one reasoning segment for the next."),
@@ -180,12 +181,12 @@ TAXONOMY: tuple[Pillar, ...] = (
     Pillar(
         "analysis",
         "Analysis of Generalization",
-        "When does reasoning transfer, and what explains its successes and failures?",
+        "What actually transfers under distribution shift, and why?",
         (
             Section(
                 "behavioral",
                 "Behavioral Evidence",
-                "Performance under named shifts: one row of the transfer matrix, not a single OOD score.",
+                "Performance under controlled shifts: one row of the transfer matrix, not a single OOD score.",
                 (
                     Leaf("composition", "Compositional Generalization", "Fixed primitives, new combinations: deeper and wider computation graphs, multi-hop chaining, and rule extrapolation."),
                     Leaf("length", "Length, Depth, and Difficulty", "Longer inputs, deeper nesting or planning horizons, and easy-to-hard transfer, which diverge even within one task."),
@@ -195,7 +196,7 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "mechanistic",
                 "Mechanistic Evidence",
-                "Whether one shared computation or separate shortcuts produce the behavior, mostly in small controlled models.",
+                "How internal computation shapes generalization, mostly in small controlled models.",
                 (
                     Leaf("circuits", "Shared Circuits", "Overlap between the circuits used on both sides of a shift predicts transfer, but may fail on new knowledge."),
                     Leaf("interfaces", "Interfaces Between Steps", "Intermediate results that are computed but do not reach the next step in a usable form."),
@@ -205,7 +206,7 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "theoretical",
                 "Theoretical Evidence",
-                "Results under explicit assumptions that separate expressivity, learnability, and certification.",
+                "Results under explicit assumptions that separate what can be represented, learned, and certified.",
                 (
                     Leaf("learnability", "Learnability", "Whether finite training selects an extrapolating procedure over shortcuts: locality, inductive bias, scratchpads, curricula, and data diversity."),
                     Leaf("certification", "Certification", "Whether a finite test can establish extrapolation: length-generalization bounds and their limits."),
@@ -223,3 +224,8 @@ def leaves() -> list[tuple[Pillar, Section, Leaf]]:
 
 def leaf_index() -> dict[str, tuple[Pillar, Section, Leaf]]:
     return {f"{p.id}.{s.id}.{leaf.id}": (p, s, leaf) for p, s, leaf in leaves()}
+
+
+def section_index() -> dict[str, tuple[Pillar, Section]]:
+    """Sections that accept studies assigned to the section as a whole."""
+    return {f"{p.id}.{s.id}": (p, s) for p in TAXONOMY for s in p.sections if s.general_label}

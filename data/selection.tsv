@@ -1,10 +1,11 @@
 paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2512.07783	zhang2025interplay	core	training.pre.data		yes	Controlled pre-training mid-training and RL capability boundary
 2504.20752	abramov2025grokking	core	training.pre.data		yes	Synthetic facts raise the inferred-to-atomic ratio for multi-hop grokking
-2407.07612	vashishtha2024teaching	core	training.pre.data		yes	Axiomatic training generalizes causal rules to longer, more complex graphs
+2407.07612		core	training.pre.data		no	Axiomatic training generalizes causal rules to longer, more complex graphs
 2604.09258	chen2026nexus	core	training.pre.opt		yes	Gradient-similarity optimizer improves OOD generalization at equal pre-training loss
 2501.08537	zhang2025complexity	core	training.pre.opt		yes	Complexity control selects reasoning over memorization
 2405.05409	zhang2024initialization	core	training.pre.opt		yes	Small initialization favors reasoning-based over memorizing solutions
+2606.23687	mehta2026randomized	core	training.mid.cpt		yes	Randomized positional exposure for long-context reasoning
 2606.16517	fesser2026posttraining	core	training.mid.cpt		yes	Controlled CPT-SFT-RL study across biological ID and OOD tasks
 2402.03300	shao2024deepseekmath	core	training.mid.cpt		yes	Math continued pre-training; introduces GRPO
 2605.08472	rrv2026midtraining	core	training.mid.ift		yes	Diverse self-generated mid-training data improves later RL and OOD transfer
@@ -12,10 +13,10 @@ paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2512.01970	cheng2025atomic	core	training.mid.ift		yes	RL composes skills only when atomic skills were learned beforehand
 2505.13718	shrestha2025warm	core	training.mid.ift		yes	Logic-puzzle warm-up before RLVR transfers across domains
 2411.12498	morishita2024alt	core	training.mid.ift		yes	Program-generated logic corpus with gains that extend to other domains
-2609.25643	liu2026ladders	core	training.sft.problem	Problem generation	yes	Self-evolving curriculum of simplified problem variants
+2609.25643	liu2026ladders	core	training.sft.problem	Difficulty curriculum	yes	Self-evolving curriculum of simplified problem variants
+2605.12906	liu2026data	core	training.sft.problem	Difficulty curriculum	yes	Optimal SFT data difficulty shifts with the data budget
+2603.27226	mordig2026rethinking	core	training.sft.problem	Difficulty curriculum	yes	Negative result on easy-to-hard ordering for deduction
 2607.07748		core	training.sft.problem	Problem generation	no	Moves test-time search into verified low-resource code data
-2605.12906	liu2026data	core	training.sft.problem	Problem generation	yes	Optimal SFT data difficulty shifts with the data budget
-2603.27226	mordig2026rethinking	core	training.sft.problem	Problem generation	yes	Negative result on easy-to-hard ordering for deduction
 2601.03676	wei2026compositional	core	training.sft.problem	Problem generation	yes	Skill-taxonomy-guided compositional data generation
 2502.01612	lee2025selfimproving	core	training.sft.problem	Problem generation	yes	Iterative self-training extrapolates arithmetic, string, and maze procedures
 2506.09433	gui2025mitigating	core	training.sft.problem	Problem rewriting	yes	Causal decomposition improves OOD formal and logical reasoning
@@ -37,22 +38,24 @@ paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2605.28014	zhao2026beyond	core	training.sft.objective	Teacher-based objectives	yes	Reflective on-policy self-distillation focused on the first erroneous span
 2603.24472	kim2026selfdistillation	core	training.sft.objective	Teacher-based objectives	yes	Epistemic verbalization predicts self-distillation OOD failures
 2602.02405		core	training.sft.objective	Teacher-based objectives	no	Aligns expert solutions to the student distribution
-2607.07646		core	training.rl.scope		no	Controlled evidence that RL composes primitive rewrite procedures
-2605.06638	wang2026how	core	training.rl.scope		yes	RL accuracy collapses a few times beyond the trained proof depth
-2602.10815		core	training.rl.scope		no	Data difficulty explains part of the VLM OOD generalization gap
-2602.01365		core	training.rl.scope		no	Cross-domain GRPO transfer is asymmetric and order-sensitive
-2601.18217		core	training.rl.scope		no	Environment properties predict cross-domain transfer in RL-trained agents
-2512.01775	park2025posttraining	core	training.rl.scope		yes	Expression-tree analysis isolates compositional RL transfer
-2510.15990	ni2025grpo	core	training.rl.scope		yes	Tests whether GRPO exceeds the pretraining capability boundary
-2509.25123	yuan2025from	core	training.rl.scope		yes	RL composes known atomic skills, extrapolates to deeper compositions, and transfers across tasks
-2509.21016		core	training.rl.scope		no	Controlled algorithm acquisition and four transfer axes
-2507.17512		core	training.rl.scope		no	Measures cross-domain help and interference
-2507.00432	huan2025math	core	training.rl.scope		yes	Representation drift explains math-to-general transfer differences
-2506.19733		core	training.rl.scope		no	Observational and interventional audit of unseen-domain RL transfer
-2505.22756		core	training.rl.scope		no	Separates planning execution and verification gains under RL
-2504.20571		core	training.rl.scope		no	One-shot RLVR shows cross-category and post-saturation transfer
-2504.13837	yue2025reinforcement	core	training.rl.scope		yes	Large-pass-k controls test whether RL expands model support
-2501.17161	chu2025sft	core	training.rl.scope		yes	Controlled comparison of SFT and RL on unseen text and visual variants
+2607.07646		core	training.rl		no	Controlled evidence that RL composes primitive rewrite procedures
+2605.06638	wang2026how	core	training.rl		yes	RL accuracy collapses a few times beyond the trained proof depth
+2604.03993		core	training.rl		no	Online label refinement improves ID and OOD reasoning under noise
+2604.01430	chaudhry2026improving	core	training.rl		yes	RL-trained thinking transfers latent deduction to new facts
+2602.10815		core	training.rl		no	Data difficulty explains part of the VLM OOD generalization gap
+2602.01365		core	training.rl		no	Cross-domain GRPO transfer is asymmetric and order-sensitive
+2601.18217		core	training.rl		no	Environment properties predict cross-domain transfer in RL-trained agents
+2512.01775	park2025posttraining	core	training.rl		yes	Expression-tree analysis isolates compositional RL transfer
+2510.15990	ni2025grpo	core	training.rl		yes	Tests whether GRPO exceeds the pretraining capability boundary
+2509.25123	yuan2025from	core	training.rl		yes	RL composes known atomic skills, extrapolates to deeper compositions, and transfers across tasks
+2509.21016		core	training.rl		no	Controlled algorithm acquisition and four transfer axes
+2507.17512		core	training.rl		no	Measures cross-domain help and interference
+2507.00432	huan2025math	core	training.rl		yes	Representation drift explains math-to-general transfer differences
+2506.19733		core	training.rl		no	Observational and interventional audit of unseen-domain RL transfer
+2505.22756		core	training.rl		no	Separates planning execution and verification gains under RL
+2504.20571		core	training.rl		no	One-shot RLVR shows cross-category and post-saturation transfer
+2504.13837	yue2025reinforcement	core	training.rl		yes	Large-pass-k controls test whether RL expands model support
+2501.17161	chu2025sft	core	training.rl		yes	Controlled comparison of SFT and RL on unseen text and visual variants
 2607.23771	choudhury2026training	core	training.rl.env		yes	Generalization to unseen inference-controller compositions
 2606.25178		core	training.rl.env		no	Gradient alignment estimates cross-domain RLVR transferability
 2606.12373	xiang2026verifiable	core	training.rl.env		yes	Recursive composition of verifiable environments
@@ -66,19 +69,22 @@ paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2505.19914	chen2025enigmata	core	training.rl.env		yes	Generator-verifier puzzle suite for multi-task RL and OOD transfer
 2608.27142	yuan2026grain	core	training.rl.reward		yes	Structure-invariance rewards under name and narrative shifts
 2608.14791	salimi2026cedargrpo	core	training.rl.reward		yes	Abductive process rewards transfer to eleven unseen tasks
-2606.01464	elhady2026crosslingual	core	training.rl.reward		yes	Cross-lingual answer-consistency reward transfers to unseen languages
+2606.01464		core	training.rl.reward		no	Cross-lingual answer-consistency reward transfers to unseen languages
 2605.29190	maniparambil2026suppresses	core	training.rl.reward		yes	Reasoning primitives explain puzzle-to-math transfer and suppression
-2605.08061		core	training.rl.reward		no	Rubric-decomposed rewards transfer beyond the source corpus
-2604.03993		core	training.rl.reward		no	Online label refinement improves ID and OOD reasoning under noise
+2605.09853	li2026explorationdriven	core	training.rl.reward		yes	Preserves policy diversity needed by inference-time sampling
+2605.08061	bhattarai2026rubricgrounded	core	training.rl.reward		yes	Rubric-decomposed rewards transfer beyond the source corpus
 2602.06475		core	training.rl.reward		no	Counterfactual robustness as a process reward
 2509.26209	hu2025diversity	core	training.rl.reward		yes	Sequence-level diversity incentives improve out-of-domain accuracy
 2509.15194	zhou2025evolving	core	training.rl.reward		yes	Label-free RL that balances majority selection with novelty
 2506.07751	gao2025abstral	core	training.rl.reward		yes	Rewarding abstraction for robustness to surface perturbations
+2505.15034	zha2025tango	core	training.rl.reward		yes	Generator and verifier trained together with RL; gains outside the training domain
+2505.14652	ma2025generalreasoner	core	training.rl.reward		yes	Model-based verifier rewards extend RL beyond rule-checkable domains
 2503.00845	peng2025rewarding	core	training.rl.reward		yes	Graph-structured process rewards transfer across graph tasks and mathematics
+2607.14614	xu2026contrastive	core	training.rl.policy		yes	Correctness-aware token-level advantage shaping that avoids OOD degradation
+2605.21467	zhang2026delta	core	training.rl.policy		yes	Discriminative token credit assignment for RLVR
 2602.18037	ackermann2026gradient	core	training.rl.policy		yes	Gradient regularization keeps RL in flat, reward-accurate regions
 2511.04439	garg2025corpo	core	training.rl.policy		yes	Correctness-biased advantages stop rewarding wrong solutions
 2511.00066		core	training.rl.policy		no	Sharpness-guided GRPO with cross-benchmark and out-domain evaluation
-2508.00222	dong2025rlplus	core	training.rl.policy		yes	External solutions via importance sampling counter capability-boundary collapse
 2606.09932	liu2026fails	core	training.hybrid.seq		yes	Restores plasticity after excessive SFT and improves OOD transfer
 2604.23747	limozin2026sftrl	core	training.hybrid.seq		yes	Corrected baselines: SFT-then-RL beats mixed-policy methods, including OOD
 2604.12378	gurgurov2026reasonxl	core	training.hybrid.seq		yes	Parallel multilingual traces and SFT-then-RL shift of reasoning language
@@ -86,6 +92,7 @@ paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2605.26184	hu2026gac	core	training.hybrid.joint		yes	Noise-aware adaptive mixing of SFT and RL signals
 2604.08926	zhu2026bridging	core	training.hybrid.joint		yes	Dynamic balance between stable imitation and exploration
 2509.04419	lv2025hpt	core	training.hybrid.joint		yes	Unified policy-gradient view with rollout-based SFT/RL routing
+2508.00222		core	training.hybrid.joint		no	External solutions via importance sampling counter capability-boundary collapse
 2507.01679	huang2025prefixrft	core	training.hybrid.joint		yes	On-policy continuation of demonstration prefixes
 2506.19767	fu2025srft	core	training.hybrid.joint		yes	Single-stage entropy-weighted supervised and RL objective
 2506.07527	ma2025relift	core	training.hybrid.joint		yes	RL interleaved with SFT on the hardest questions
@@ -98,23 +105,23 @@ paper_id	citation_key	role	taxonomy_id	subgroup	in_survey	inclusion_note
 2605.16410	hou2026testtime	core	inference.trajectory.injection		yes	Black-box hints transfer across benchmarks and VLMs
 2404.00884	he2024selfdemos	core	inference.trajectory.injection		yes	Query-specific demonstrations for out-of-demonstration queries
 2402.03620	zhou2024selfdiscover	core	inference.trajectory.injection		yes	Self-composed reasoning structures selected before decoding
-2605.09853	li2026explorationdriven	core	inference.compute.search		yes	Preserves policy diversity needed by inference-time sampling
 acl:2025.findings-acl.388	chan2025boosting	core	inference.compute.search		yes	Process-reward-guided Monte Carlo tree search for open-domain QA
 2408.03314	snell2024scaling	core	inference.compute.search		yes	Difficulty-adaptive allocation between parallel search and sequential revision
+2406.03816	zhang2024restmcts	core	inference.compute.search		yes	Process-reward-guided tree search evaluated on non-source benchmarks
 2607.21453	chitale2026testtime	core	inference.compute.revision		yes	Reuse valid prefixes after feedback-localized errors
-2604.01430	chaudhry2026improving	core	inference.compute.revision		yes	RL-trained thinking transfers latent deduction to new facts
 2608.05660	damirchi2026reasoning	core	inference.assessment.internal		yes	Cross-benchmark detector transfer; not generator generalization
 2607.17188	yan2026upair	core	inference.assessment.internal		yes	Uncertainty-progress signals choose continue, switch, or stop
 2604.01170	zhou2026orca	core	inference.assessment.internal		yes	Online conformal calibration of reasoning under distribution shift
 2505.18404	wu2025thought	core	inference.assessment.internal		yes	Probe-based stopping rule for test-time reasoning
 2505.19475	moradi2025vds	core	inference.assessment.verifier		yes	Verifier-selected pseudo-labels for test-time training on OOD queries
 2505.04842	sareen2025putting	core	inference.assessment.verifier		yes	Joint reasoner-verifier training for verifier-selected inference
+2502.14361	zhu2025retrievalprm	core	inference.assessment.verifier		yes	Retrieval-augmented PRM for question-OOD process verification
 2510.14826	malach2026infinity	core	inference.externalization.within		yes	Tools unlock length generalization in state-space models
 2502.11435	qian2025smart	core	inference.externalization.within		yes	Self-aware decisions about when external tools are unnecessary
 2411.04535	alazraki2025tecton	core	inference.externalization.within		yes	Meta-reasoning over candidate tools for tool selection
 2401.17464	gao2025chain	core	inference.externalization.within		yes	Chain-of-abstraction separates reasoning from tool-supplied values
 2607.06974	tong2026miles	core	inference.externalization.cross		yes	Reusable modular instruction memory at test time
-2509.25140	ouyang2025reasoningbank	core	inference.externalization.cross		yes	Reasoning memory supports agent self-improvement
+2509.25140	ouyang2026reasoningbank	core	inference.externalization.cross		yes	Reasoning memory supports agent self-improvement
 2608.31067	ito2026universal	core	architecture.depth.sharing		yes	Circuit reduction with learned shallow-to-unbounded length transfer
 2608.18171	popescu2026looped	core	architecture.depth.sharing		yes	Looped models improve multi-step compositional tool calling
 2608.11233	shapiro2026retrofitting	core	architecture.depth.sharing		yes	Retrofitted recurrent block extrapolates in depth on rule-following tasks
@@ -125,17 +132,15 @@ acl:2025.findings-acl.388	chan2025boosting	core	inference.compute.search		yes	Pr
 2409.15647	fan2025looped	core	architecture.depth.sharing		yes	Foundational looped-transformer length generalization
 1807.03819	dehghani2019universal	core	architecture.depth.sharing		yes	Universal Transformer as adaptive recurrent computation
 openreview:XW18V4H9sq	ibrahimli2026adaptive	core	architecture.depth.adaptive		yes	Adaptive recurrence as algorithmic time for length generalization in addition
+2608.18222	viakhirev2026think	core	architecture.depth.adaptive		yes	Settling regimes predict safe extra test-time depth
 2606.29983	kuo2026stabilizing	core	architecture.depth.adaptive		yes	Stochastic stopping stabilizes loop-count extrapolation
+2606.18206	movahedi2026fixedpoint	core	architecture.depth.adaptive		yes	Fixed-point convergence as halting for stable deep looped reasoning
 2606.06574	li2026polar	core	architecture.depth.adaptive		yes	Input-dependent programs that skip or repeat pretrained layers
+2605.21488	huang2026equilibrium	core	architecture.depth.adaptive		yes	Learned attractors support scalable iterative reasoning
+2604.15259	labovich2026stability	core	architecture.depth.adaptive		yes	Fixed-point stability conditions for extrapolation in looped transformers
 2511.08577	fu2026thinkathard	core	architecture.depth.adaptive		yes	Selective latent iterations transfer from math-only training to science
 2310.08866	abnar2023adaptivity	core	architecture.depth.adaptive		yes	Adaptive and modular computation for generalization over computation depth
-2608.18222	viakhirev2026think	core	architecture.depth.stability		yes	Settling regimes predict safe extra test-time depth
-2606.18206	movahedi2026fixedpoint	core	architecture.depth.stability		yes	Fixed-point convergence as halting for stable deep looped reasoning
-2605.21488	huang2026equilibrium	core	architecture.depth.stability		yes	Learned attractors support scalable iterative reasoning
-2604.15259	labovich2026stability	core	architecture.depth.stability		yes	Fixed-point stability conditions for extrapolation in looped transformers
-2510.20607	oarga2025generalizable	core	architecture.depth.stability		yes	Iterative compositional energy minimization
 2607.07678	wu2026data	core	architecture.routing.position		yes	Training data determines RoPE frequency use and extrapolation
-2606.23687	mehta2026randomized	core	architecture.routing.position		yes	Randomized positional exposure for long-context reasoning
 2602.14050	shimizu2026position	core	architecture.routing.position		yes	Random float positions reduce unseen-index shift
 2501.00712	zhu2025tape	core	architecture.routing.position		yes	Contextualized equivariant positional encoding for algorithmic extrapolation
 2410.15787	cho2024arithmetic	core	architecture.routing.position		yes	Task-specific scratchpads and position coupling generalize in operand length and count
@@ -148,6 +153,7 @@ openreview:XW18V4H9sq	ibrahimli2026adaptive	core	architecture.depth.adaptive		ye
 2305.03796	chi2023transformer	core	architecture.routing.attention		yes	Sliding-dilated attention with shared layers extrapolates regular languages
 2608.20054		core	architecture.routing.modular		no	Evidence masking changes which compositional solution is learned
 2604.26522	shahid2026agelcomp	core	architecture.routing.modular		yes	Causal graphs, logic induction, and theorem verification
+2510.20607	oarga2025generalizable	core	architecture.routing.modular		yes	Iterative compositional energy minimization
 2412.15588	kamali2025nesycoco	core	architecture.routing.modular		yes	Neuro-symbolic concept composer for compositional vision-language reasoning
 2410.13964	zhao2025sparse	core	architecture.routing.modular		yes	Optimal expert sparsity grows with compositional complexity
 2309.07624	fu2024morse	core	architecture.routing.modular		yes	Specialized attention-head modules for longer and structurally novel entailment trees
@@ -234,10 +240,16 @@ openreview:XW18V4H9sq	ibrahimli2026adaptive	core	architecture.depth.adaptive		ye
 2410.02140	huang2025formal	core	analysis.theoretical.certification		yes	Limit-identifiability framework for length generalization with absolute positions
 2510.10182	chen2025survey	survey			yes	Neighboring survey limited to induction
 2509.16330	zhang2025generalizability	survey			yes	Neighboring survey limited to agent systems
+2507.06203	zhu2025survey	survey			yes	Neighboring survey on latent reasoning
 2210.03050	hupkes2023stateoftheart	survey			yes	Foundational taxonomy of distribution shifts in NLP
 2108.13624	liu2021outofdistribution	survey			yes	Foundational survey of out-of-distribution generalization
+2505.20674	zeng2025pretraining	background			yes	Pondering in continuous space; background for recurrent depth
+2502.05171	geiping2026scaling	background			yes	Recurrent-depth latent reasoning; background for recurrent depth
 2402.12875	li2024chain	background			yes	CoT expressivity for serial problems; context for learnability results
 2310.07923	merrill2024expressive	background			yes	Expressivity of CoT decoders; context for learnability results
+2207.06881	bulatov2022recurrent	background			yes	Recurrent memory transformer; background for recurrent memory
 2203.11171	wang2023selfconsistency	background			yes	Majority-vote decoding; background for maj@k evaluation
 1907.02893	arjovsky2019irm	background			yes	Invariant risk minimization; background for regularization-based objectives
+1706.03762	vaswani2017attention	background			yes	Transformer architecture; background for information routing
+1701.06538	shazeer2017outrageously	background			yes	Sparsely-gated mixture of experts; background for modular routing
 1503.02531	hinton2015distilling	background			yes	Knowledge distillation; background for teacher-based objectives

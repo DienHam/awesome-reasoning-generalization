@@ -5,17 +5,17 @@
 ### Beyond the Training Distribution: A Survey of Reasoning Generalization in Large Language Models
 
 [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
-![Papers](https://img.shields.io/badge/papers-233-6f42c1)
-![2024 papers](https://img.shields.io/badge/2024%20papers-34-yellow)
-![2025 papers](https://img.shields.io/badge/2025%20papers-68-orange)
-![2026 papers](https://img.shields.io/badge/2026%20papers-110-red)
+![Papers](https://img.shields.io/badge/papers-239-6f42c1)
+![2024 papers](https://img.shields.io/badge/2024%20papers-35-yellow)
+![2025 papers](https://img.shields.io/badge/2025%20papers-71-orange)
+![2026 papers](https://img.shields.io/badge/2026%20papers-112-red)
 [![GitHub last commit](https://img.shields.io/github/last-commit/tue09/awesome-reasoning-generalization?logo=github&color=blue)](https://github.com/tue09/awesome-reasoning-generalization/commits/main)
 
 </div>
 
-> **Status:** Updated on 7 October 2026 to follow the latest version of the survey (literature search through 10 September 2026). The list contains 233 studies organized by the survey's taxonomy: 208 discussed in the survey and 25 more from the same screening. By first arXiv posting, 110 are from 2026, 68 from 2025, 34 from 2024, and 21 are earlier foundations.
+> **Status:** Updated on 11 October 2026 to follow the complete version of the survey (literature search through 10 September 2026). The survey's corpus has 169 core studies: 88 on analysis, 46 on training, 21 on architecture, and 14 on inference. This list holds 239 studies under the survey's taxonomy: the 212 core studies and contextual methods the survey discusses, and 27 more from the same screening. By first arXiv posting, 112 are from 2026, 71 from 2025, 35 from 2024, and 21 are earlier foundations.
 
-Progress in LLM reasoning is commonly measured on benchmarks that stay close to the training distribution. This list collects work on whether the reasoning procedures that large language models acquire still hold when notation, problem structure, length, difficulty, domain, language, or tool interface changes, and on what training, inference, and architecture contribute to that transfer. The companion text is in [survey.md](survey.md).
+Progress in LLM reasoning is commonly measured on benchmarks that stay close to the training distribution. This list collects work on the question the survey asks: when and how can large language models generalize their reasoning beyond their training distributions, under changes in notation, problem structure, length, difficulty, domain, language, or tool interface? The companion text is in [survey.md](survey.md), and the paper is in [full_paper/](full_paper/).
 
 ## Contents
 
@@ -26,7 +26,7 @@ Progress in LLM reasoning is commonly measured on benchmarks that stay close to 
     - [Pre-Training](#pre-training): [Data Curation](#data-curation), [Optimizer Design](#optimizer-design)
     - [Mid-Training](#mid-training): [Continued Pre-Training](#continued-pre-training), [Intermediate Fine-Tuning](#intermediate-fine-tuning)
     - [Post-Training: Supervised Fine-Tuning](#post-training-supervised-fine-tuning): [Problem-Level Methods](#problem-level-methods), [Solution-Level Methods](#solution-level-methods), [Objective-Level Methods](#objective-level-methods)
-    - [Post-Training: Reinforcement Learning](#post-training-reinforcement-learning): [Scope and Limits of RL Transfer](#scope-and-limits-of-rl-transfer), [Environment Design](#environment-design), [Reward Design](#reward-design), [Policy Optimization](#policy-optimization)
+    - [Post-Training: Reinforcement Learning](#post-training-reinforcement-learning): [Environment Design](#environment-design), [Reward Design](#reward-design), [Policy Optimization](#policy-optimization)
     - [Post-Training: Hybrid Training](#post-training-hybrid-training): [Sequential Training](#sequential-training), [Joint Training](#joint-training)
   - [Inference for Generalization](#inference-for-generalization)
     - [Trajectory Restructuring](#trajectory-restructuring): [Structural Decomposition](#structural-decomposition), [Upfront Structural Injection](#upfront-structural-injection)
@@ -34,7 +34,7 @@ Progress in LLM reasoning is commonly measured on benchmarks that stay close to 
     - [State Assessment](#state-assessment): [Internal State Assessment](#internal-state-assessment), [Verifier-Mediated Assessment](#verifier-mediated-assessment)
     - [Inference-Time Externalization](#inference-time-externalization): [Within-Episode Externalization](#within-episode-externalization), [Cross-Episode Externalization](#cross-episode-externalization)
   - [Architecture for Generalization](#architecture-for-generalization)
-    - [Recurrent Depth](#recurrent-depth): [Weight Sharing](#weight-sharing), [Adaptive Computation](#adaptive-computation), [Stable Recurrent Dynamics](#stable-recurrent-dynamics)
+    - [Recurrent Depth](#recurrent-depth): [Weight Sharing](#weight-sharing), [Adaptive Computation](#adaptive-computation)
     - [Information Routing](#information-routing): [Positional Encoding](#positional-encoding), [Attention Patterns](#attention-patterns), [Modular Reasoning](#modular-reasoning)
     - [Recurrent Memory](#recurrent-memory): [Token-Level Recurrence](#token-level-recurrence), [Chunk-Level Recurrence](#chunk-level-recurrence)
   - [Analysis of Generalization](#analysis-of-generalization)
@@ -47,31 +47,33 @@ Progress in LLM reasoning is commonly measured on benchmarks that stay close to 
 
 ## Reading a Generalization Claim
 
-A reasoning-generalization result can be interpreted only when four elements are explicit.
+A reasoning-generalization result can be interpreted only when it states what the model has encountered, what changes at test time, and which components remain fixed. Table 5 of the survey lists the minimum report.
 
-| Element | Question |
-| --- | --- |
-| **Task and fixed unit** | What is solved, and which components stay constant: weights, prompt, controller, verifier, memory, or tools? |
-| **Reference exposure** | Which stage defines "seen": pre-training, mid-training, SFT or distillation, RL, or test-time adaptation? |
-| **Test shift** | Which axis moves: instance, surface form, composition, length or depth, difficulty, task or domain, language or modality, environment or tool, or required knowledge? |
-| **Evidence** | How is transfer shown: behavioral outcomes, representational associations, causal interventions, or formal results under explicit assumptions? |
+| Field | Minimum report | Misreading prevented |
+| --- | --- | --- |
+| **Reasoning task** | Generator or dataset, target output, metric, and relevant constraints | Treating a broad benchmark score as evidence about one reasoning process |
+| **Reference exposure** | Pre-training knowledge if available; all continued-training, SFT, distillation, RL, and adaptation data | Calling an item unseen only because it was absent from the last training stage |
+| **Evaluated components** | Whether weights, prompts, exemplars, controller, verifier, memory, retriever, and tools remain fixed | Attributing gains from inference methods or external resources to changes in learned model capabilities |
+| **Test shift** | Named axis, construction method, distance or level, and matched ID control | Combining instance, surface, composition, length, and domain shifts into one OOD label |
+| **Outcome and evidence** | Performance with uncertainty, generalization gap when comparable, mechanism test if claimed | Treating a probe, score change, or finite test range as stronger evidence than it provides |
+| **Inference cost** | Samples, generated tokens, tool calls, wall time or FLOPs, and stopping rule | Reporting an accuracy gain that follows only from unbounded extra computation |
 
-Claims also differ in what is held fixed. *Model-level* generalization concerns the learned parameters under a fixed decoding procedure; *procedure-level* generalization adds prompting, search, or another inference algorithm; *system-level* generalization further adds retrievers, verifiers, memories, tools, and environments. A tool-augmented system can solve longer problems even when the base model has not learned a length-general algorithm.
+Gains enabled by prompting, search, verification, or memory need not hold for the model alone: a tool-augmented system can solve longer problems even when the base model has not learned a length-general algorithm. Greedy accuracy shows what a model produces reliably, large-pass@k accuracy what it can produce occasionally, and verifier-selected accuracy what a larger system can recover.
 
 ## Taxonomy
 
 | Pillar | Central question | Branches |
 | --- | --- | --- |
 | **Training for Generalization** | How can parameter updates make a learned reasoning procedure survive shifts in form, composition, length, difficulty, domain, or language? | Pre-training, mid-training, and post-training (SFT, RL, hybrid) |
-| **Inference for Generalization** | How can a fixed model be deployed on unfamiliar problems by changing computation at test time, and where does that stop helping? | Trajectory restructuring, compute scaling, state assessment, externalization |
-| **Architecture for Generalization** | Which computational structures let a learned operation be reused at greater length, depth, or compositional complexity? | Recurrent depth, information routing, recurrent memory |
-| **Analysis of Generalization** | When does reasoning transfer, and what explains its successes and failures? | Behavioral, mechanistic, and theoretical evidence |
+| **Inference for Generalization** | How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping? | Trajectory restructuring, compute scaling, state assessment, externalization |
+| **Architecture for Generalization** | Which computational structures let a learned operation be reused when problems grow longer or combine familiar steps in new ways? | Recurrent depth, information routing, recurrent memory |
+| **Analysis of Generalization** | What actually transfers under distribution shift, and why? | Behavioral, mechanistic, and theoretical evidence |
 
 <p align="center">
   <a href="assets/main_taxonomy.pdf"><img src="assets/main_taxonomy.svg" width="100%" alt="Taxonomy of reasoning generalization in large language models"></a>
 </p>
 
-The first three pillars are interventions, ordered by where they act: on parameters, on test-time computation with the parameters fixed, and on the model's computational structure. Training is organized by stage and, within each stage, by the component a method modifies. The fourth pillar separates behavioral, mechanistic, and theoretical evidence. Each paper appears once, under its primary source of generalization.
+The first three pillars are interventions, ordered by where they act: on parameters, on test-time computation with the parameters fixed, and on the model's computational structure. Training is organized by stage and, within each stage, by the component a method modifies. The fourth pillar separates behavioral, mechanistic, and theoretical evidence. Each paper appears once, under its primary source of generalization; studies the survey assigns to a branch as a whole, such as evidence on RL transfer, are listed before that branch's leaves.
 
 ## Paper List
 
@@ -81,11 +83,11 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Pre-Training
 
-*Pre-training sets the reasoning primitives that later stages can recombine but can hardly supply.*
+*Pre-training provides the model with its initial knowledge and reasoning primitives.*
 
 ##### Data Curation
 
-> Control what the corpus contains: coverage of the required primitives and the share of facts that must be inferred rather than recalled.
+> Control what the corpus contains: the primitives that later compositions require and the share of facts that must be inferred rather than stated.
 
 - **On the Interplay of Pre-Training, Mid-Training, and RL on Reasoning Language Models**. *Charlie Zhang, Graham Neubig, Xiang Yue*. [[Paper]](https://arxiv.org/abs/2512.07783) [[PDF]](https://arxiv.org/pdf/2512.07783) ![](https://img.shields.io/badge/year-2025-orange)
 - **Grokking in the Wild: Data Augmentation for Real-World Multi-Hop Reasoning with Transformers**. *Roman Abramov, Felix Steinbauer, Gjergji Kasneci*. [[Paper]](https://arxiv.org/abs/2504.20752) [[PDF]](https://arxiv.org/pdf/2504.20752) ![](https://img.shields.io/badge/year-2025-orange)
@@ -93,7 +95,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Optimizer Design
 
-> Change how the corpus is fit, since solutions with equal training loss can behave differently out of distribution.
+> Change how the model fits the same corpus, by aligning gradients across data sources or by favoring primitives over memorization.
 
 - **Nexus: Same Pretraining Loss, Better Downstream Generalization via Common Minima**. *Huanran Chen, Huaqing Zhang, Xiao Li, Yinpeng Dong, Ke Shen, Jun Zhu*. [[Paper]](https://arxiv.org/abs/2604.09258) [[PDF]](https://arxiv.org/pdf/2604.09258) ![](https://img.shields.io/badge/year-2026-red)
 - **Complexity Control Facilitates Reasoning-Based Compositional Generalization in Transformers**. *Zhongwang Zhang, Pengxiao Lin, Zhiwei Wang, Yaoyu Zhang, Zhi-Qin John Xu*. [[Paper]](https://arxiv.org/abs/2501.08537) [[PDF]](https://arxiv.org/pdf/2501.08537) ![](https://img.shields.io/badge/year-2025-orange)
@@ -101,18 +103,19 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Mid-Training
 
-*An intermediate stage before task adaptation, so that post-training does not start out of distribution.*
+*A stage between pre-training and task-specific adaptation that narrows the gap between their distributions and supplies skills the target tasks require.*
 
 ##### Continued Pre-Training
 
-> Next-token prediction on raw text from an under-represented domain.
+> Next-token prediction on raw text from a domain, or a positional range, under-represented in pre-training.
 
+- **Randomized YaRN Improves Length Generalization for Long-Context Reasoning**. *Manas Mehta, Fangcong Yin, Greg Durrett*. [[Paper]](https://arxiv.org/abs/2606.23687) [[PDF]](https://arxiv.org/pdf/2606.23687) ![](https://img.shields.io/badge/year-2026-red)
 - **How Post-Training Shapes Biological Reasoning Models**. *Lukas Fesser, Hanlin Zhang, Michelle M. Li, Eric Wang, Bryan Perozzi, Shekoofeh Azizi, Sham M. Kakade, Marinka Zitnik*. [[Paper]](https://arxiv.org/abs/2606.16517) [[PDF]](https://arxiv.org/pdf/2606.16517) ![](https://img.shields.io/badge/year-2026-red)
 - **DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models**. *Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang, Y. K. Li, Y. Wu, Daya Guo*. [[Paper]](https://arxiv.org/abs/2402.03300) [[PDF]](https://arxiv.org/pdf/2402.03300) ![](https://img.shields.io/badge/year-2024-yellow)
 
 ##### Intermediate Fine-Tuning
 
-> Training on solved problems that need no domain knowledge, so that the acquired reasoning transfers and prepares later RL.
+> Training on solved problems that need no domain knowledge, so that the acquired reasoning transfers and prepares later training.
 
 - **Mid-Training with Self-Generated Data Improves Reinforcement Learning in Language Models**. *Aswin RRV, Jacob Dineen, Divij Handa, Mihir Parmar, Ben Zhou, Swaroop Mishra, Chitta Baral*. [[Paper]](https://arxiv.org/abs/2605.08472) [[PDF]](https://arxiv.org/pdf/2605.08472) ![](https://img.shields.io/badge/year-2026-red)
 - **Fundamental Reasoning Paradigms Induce Out-of-Domain Generalization in Language Models**. *Mingzi Cao, Xingwei Tan, Mahmud Elahi Akhter, Marco Valentino, Maria Liakata, Xi Wang, Nikolaos Aletras*. [[Paper]](https://arxiv.org/abs/2602.08658) [[PDF]](https://arxiv.org/pdf/2602.08658) ![](https://img.shields.io/badge/year-2026-red)
@@ -126,7 +129,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Problem-Level Methods
 
-> Represent the anticipated test shift among the training problems.
+> Represent the anticipated test shift among the training problems, leaving no single surface pattern to memorize.
 
 **Problem rewriting**
 
@@ -135,12 +138,15 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 **Problem generation**
 
-- **Ladders of Thought: A Self-Evolving Curriculum of Progressively Simplified Reasoning Traces**. *Minghui Liu, Thomas Magelinski, Dehao Yuan, Qi Yu, Furong Huang*. [[Paper]](https://arxiv.org/abs/2609.25643) [[PDF]](https://arxiv.org/pdf/2609.25643) ![](https://img.shields.io/badge/year-2026-red)
 - **Selective Left-Shift: Turning Test-Time Compute and Difficulty-based Curation into Training Data for Low-Resource Code Generation**. *Didula Samaraweera, Anjana Supun, Srinath Perera*. [[Paper]](https://arxiv.org/abs/2607.07748) [[PDF]](https://arxiv.org/pdf/2607.07748) ![](https://img.shields.io/badge/year-2026-red)
-- **Data Difficulty and the Generalization--Extrapolation Tradeoff in LLM Fine-Tuning**. *Siyuan Liu, Tinghong Chen, Xinghan Li, Yifei Wang, Jingzhao Zhang*. [[Paper]](https://arxiv.org/abs/2605.12906) [[PDF]](https://arxiv.org/pdf/2605.12906) ![](https://img.shields.io/badge/year-2026-red)
-- **Rethinking Easy-to-Hard: Limits of Curriculum Learning in Post-Training for Deductive Reasoning**. *Maximilian Mordig, Andreas Opedal, Weiyang Liu, Bernhard Schölkopf*. [[Paper]](https://arxiv.org/abs/2603.27226) [[PDF]](https://arxiv.org/pdf/2603.27226) ![](https://img.shields.io/badge/year-2026-red)
 - **Towards Compositional Generalization of LLMs via Skill Taxonomy Guided Data Synthesis**. *Yifan Wei, Li Du, Xiaoyan Yu, Yang Feng, Angsheng Li*. [[Paper]](https://arxiv.org/abs/2601.03676) [[PDF]](https://arxiv.org/pdf/2601.03676) ![](https://img.shields.io/badge/year-2026-red)
 - **Self-Improving Transformers Overcome Easy-to-Hard and Length Generalization Challenges**. *Nayoung Lee, Ziyang Cai, Avi Schwarzschild, Kangwook Lee, Dimitris Papailiopoulos*. [[Paper]](https://arxiv.org/abs/2502.01612) [[PDF]](https://arxiv.org/pdf/2502.01612) ![](https://img.shields.io/badge/year-2025-orange)
+
+**Difficulty curriculum**
+
+- **Ladders of Thought: A Self-Evolving Curriculum of Progressively Simplified Reasoning Traces**. *Minghui Liu, Thomas Magelinski, Dehao Yuan, Qi Yu, Furong Huang*. [[Paper]](https://arxiv.org/abs/2609.25643) [[PDF]](https://arxiv.org/pdf/2609.25643) ![](https://img.shields.io/badge/year-2026-red)
+- **Data Difficulty and the Generalization--Extrapolation Tradeoff in LLM Fine-Tuning**. *Siyuan Liu, Tinghong Chen, Xinghan Li, Yifei Wang, Jingzhao Zhang*. [[Paper]](https://arxiv.org/abs/2605.12906) [[PDF]](https://arxiv.org/pdf/2605.12906) ![](https://img.shields.io/badge/year-2026-red)
+- **Rethinking Easy-to-Hard: Limits of Curriculum Learning in Post-Training for Deductive Reasoning**. *Maximilian Mordig, Andreas Opedal, Weiyang Liu, Bernhard Schölkopf*. [[Paper]](https://arxiv.org/abs/2603.27226) [[PDF]](https://arxiv.org/pdf/2603.27226) ![](https://img.shields.io/badge/year-2026-red)
 
 ##### Solution-Level Methods
 
@@ -181,14 +187,14 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Post-Training: Reinforcement Learning
 
-*Rewards replace reference solutions; transfer depends on the practiced environments, the rewarded behavior, and the update rule, and stays bounded by the base model.*
+*Rewards replace reference solutions. RL reportedly transfers where SFT degrades, yet its gains stay bounded by pre-training and by the trained depth.*
 
-##### Scope and Limits of RL Transfer
-
-> Controlled evidence on when RL transfers where SFT degrades, and on the base-model and depth limits of that transfer.
+**Evidence on RL transfer**
 
 - **RL Post-Training Builds Compositional Reasoning Strategies**. *Azwar Abdulsalam, Nishil Patel, Andrew Saxe*. [[Paper]](https://arxiv.org/abs/2607.07646) [[PDF]](https://arxiv.org/pdf/2607.07646) ![](https://img.shields.io/badge/year-2026-red)
 - **How Deep Can LLMs Learn to Reason? Expressiveness Is Key**. *Tianle Wang, Zhaoyang Wang, Guangchen Lan, Xinpeng Wei, Sipeng Zhang, Guanwen Qiu, Abulhair Saparov*. [[Paper]](https://arxiv.org/abs/2605.06638) [[PDF]](https://arxiv.org/pdf/2605.06638) ![](https://img.shields.io/badge/year-2026-red)
+- **Can LLMs Learn to Reason Robustly under Noisy Supervision?** *Shenzhi Yang, Guangcheng Zhu, Bowen Song, Sharon Li, Haobo Wang, Xing Zheng, Yingfan Ma, Zhongqi Chen, Weiqiang Wang, Gang Chen*. [[Paper]](https://arxiv.org/abs/2604.03993) [[PDF]](https://arxiv.org/pdf/2604.03993) ![](https://img.shields.io/badge/year-2026-red)
+- **Improving Latent Generalization Using Test-time Compute**. *Arslan Chaudhry, Sridhar Thiagarajan, Andrew Lampinen*. [[Paper]](https://arxiv.org/abs/2604.01430) [[PDF]](https://arxiv.org/pdf/2604.01430) ![](https://img.shields.io/badge/year-2026-red)
 - **Why Does RL Generalize Better Than SFT? A Data-Centric Perspective on VLM Post-Training**. *Aojun Lu, Tao Feng, Hangjie Yuan, Wei Li, Yanan Sun*. [[Paper]](https://arxiv.org/abs/2602.10815) [[PDF]](https://arxiv.org/pdf/2602.10815) ![](https://img.shields.io/badge/year-2026-red)
 - **When Domains Interact: Asymmetric and Order-Sensitive Cross-Domain Effects in Reinforcement Learning for Reasoning**. *Wang Yang, Shouren Wang, Chaoda Song, Chuang Ma, Xinpeng Li, Nengbo Wang, Kaixiong Zhou, Vipin Chaudhary, Xiaotian Han*. [[Paper]](https://arxiv.org/abs/2602.01365) [[PDF]](https://arxiv.org/pdf/2602.01365) ![](https://img.shields.io/badge/year-2026-red)
 - **Paying Less Generalization Tax: A Cross-Domain Generalization Study of RL Training for LLM Agents**. *Zhihan Liu, Lin Guan, Yixin Nie, Kai Zhang, Zhuoqun Hao, Lin Chen, Asli Celikyilmaz, Zhaoran Wang, Na Zhang*. [[Paper]](https://arxiv.org/abs/2601.18217) [[PDF]](https://arxiv.org/pdf/2601.18217) ![](https://img.shields.io/badge/year-2026-red)
@@ -206,7 +212,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Environment Design
 
-> Change the problems and checkers the model practices on: generated puzzles, composed environments, chained horizons, games, and controllers.
+> Change the problems and checkers the model practices on: synthesis of checkable problems, composition of environments, and chaining of short problems into longer horizons.
 
 - **Training Language Models to Cooperate with Inference-Time Controllers**. *Moumita Choudhury, Vanshaj Khattar, Jing Liu, Toshiaki Koike-Akino, Ankush Chakrabarty, Shlomo Zilberstein, Ye Wang*. [[Paper]](https://arxiv.org/abs/2607.23771) [[PDF]](https://arxiv.org/pdf/2607.23771) ![](https://img.shields.io/badge/year-2026-red)
 - **Transferability for General Reasoning: An Automated Curriculum for Multi-Domain RLVR**. *Yongjin Yang, Jiarui Liu, Yinghui He, Lechen Zhang, Bernhard Schölkopf, Zhijing Jin*. [[Paper]](https://arxiv.org/abs/2606.25178) [[PDF]](https://arxiv.org/pdf/2606.25178) ![](https://img.shields.io/badge/year-2026-red)
@@ -222,28 +228,31 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Reward Design
 
-> Change what is rewarded beyond the final answer: process, structure, abstraction, cross-lingual consistency, and diversity.
+> Reward properties of the reasoning, not only the final answer: process rewards, and rewards beyond correctness for abstract structure, LLM-as-a-judge verification, and solution diversity.
 
 - **GRAIN: Bridging Name and Narrative Shifts in Real-World Graph Reasoning through Invariance-Rewarded Agentic RL**. *Zike Yuan, Han Zhang, Jianzhi Yan, Le Liu, Cai Ke, Huozhi Zhou, Jian Xie, Jiran Yin, Yukun Cao, Yue Yu, et al.* [[Paper]](https://arxiv.org/abs/2608.27142) [[PDF]](https://arxiv.org/pdf/2608.27142) ![](https://img.shields.io/badge/year-2026-red)
 - **CEDAR-GRPO: Process-Aware Reinforcement Learning for General Abductive Reasoning in LLMs**. *Moein Salimi, Danial Parnian, Shaygan Adim, Amirmohammad Ebrahiminasab, Nima Alighardashi, Parsa Gholami, Sahand Akramipour, Mahdi Jafari Siavoshani, Mohammad Hossein Rohban*. [[Paper]](https://arxiv.org/abs/2608.14791) [[PDF]](https://arxiv.org/pdf/2608.14791) ![](https://img.shields.io/badge/year-2026-red)
 - **Cross-lingual Self-Consistency for Multilingual Reasoning with Language Models**. *Ahmed Elhady, Eneko Agirre, Mikel Artetxe*. [[Paper]](https://arxiv.org/abs/2606.01464) [[PDF]](https://arxiv.org/pdf/2606.01464) ![](https://img.shields.io/badge/year-2026-red)
 - **When RL Suppresses Its Own Vocabulary: Recovering Reasoning Diversity in Puzzle-to-Math Transfer**. *Mayug Maniparambil, Arjun Karuvally, Terrence Sejnowski, Fergal Reid*. [[Paper]](https://arxiv.org/abs/2605.29190) [[PDF]](https://arxiv.org/pdf/2605.29190) ![](https://img.shields.io/badge/year-2026-red)
+- **Exploration-Driven Optimization for Test-Time Large Language Model Reasoning**. *Changhao Li, Yuchen Zhuang, Chenxiao Gao, Haotian Sun, Rushi Qiang, Chao Zhang, Bo Dai*. [[Paper]](https://arxiv.org/abs/2605.09853) [[PDF]](https://arxiv.org/pdf/2605.09853) ![](https://img.shields.io/badge/year-2026-red)
 - **Rubric-Grounded RL: Structured Judge Rewards for Generalizable Reasoning**. *Manish Bhattarai, Ismael Boureima, Nishath Rajiv Ranasinghe, Scott Pakin, Dan O'Malley*. [[Paper]](https://arxiv.org/abs/2605.08061) [[PDF]](https://arxiv.org/pdf/2605.08061) ![](https://img.shields.io/badge/year-2026-red)
-- **Can LLMs Learn to Reason Robustly under Noisy Supervision?** *Shenzhi Yang, Guangcheng Zhu, Bowen Song, Sharon Li, Haobo Wang, Xing Zheng, Yingfan Ma, Zhongqi Chen, Weiqiang Wang, Gang Chen*. [[Paper]](https://arxiv.org/abs/2604.03993) [[PDF]](https://arxiv.org/pdf/2604.03993) ![](https://img.shields.io/badge/year-2026-red)
 - **Towards Generalizable Reasoning: Group Causal Counterfactual Policy Optimization for LLM Reasoning**. *Jingyao Wang, Peizheng Guo, Wenwen Qiang, Jiahuan Zhou, Huijie Guo, Changwen Zheng, Hui Xiong*. [[Paper]](https://arxiv.org/abs/2602.06475) [[PDF]](https://arxiv.org/pdf/2602.06475) ![](https://img.shields.io/badge/year-2026-red)
 - **Diversity-Incentivized Exploration for Versatile Reasoning**. *Zican Hu, Shilin Zhang, Yafu Li, Jianhao Yan, Xuyang Hu, Leyang Cui, Xiaoye Qu, Chunlin Chen, Yu Cheng, Zhi Wang*. [[Paper]](https://arxiv.org/abs/2509.26209) [[PDF]](https://arxiv.org/pdf/2509.26209) ![](https://img.shields.io/badge/year-2025-orange)
 - **Evolving Language Models without Labels: Majority Drives Selection, Novelty Promotes Variation**. *Yujun Zhou, Zhenwen Liang, Haolin Liu, Wenhao Yu, Kishan Panaganti, Linfeng Song, Dian Yu, Xiangliang Zhang, Haitao Mi, Dong Yu*. [[Paper]](https://arxiv.org/abs/2509.15194) [[PDF]](https://arxiv.org/pdf/2509.15194) ![](https://img.shields.io/badge/year-2025-orange)
 - **AbstRaL: Augmenting LLMs' Reasoning by Reinforcing Abstract Thinking**. *Silin Gao, Antoine Bosselut, Samy Bengio, Emmanuel Abbe*. [[Paper]](https://arxiv.org/abs/2506.07751) [[PDF]](https://arxiv.org/pdf/2506.07751) ![](https://img.shields.io/badge/year-2025-orange)
+- **RL Tango: Reinforcing Generator and Verifier Together for Language Reasoning**. *Kaiwen Zha, Zhengqi Gao, Maohao Shen, Zhang-Wei Hong, Duane S. Boning, Dina Katabi*. [[Paper]](https://arxiv.org/abs/2505.15034) [[PDF]](https://arxiv.org/pdf/2505.15034) ![](https://img.shields.io/badge/year-2025-orange)
+- **General-Reasoner: Advancing LLM Reasoning Across All Domains**. *Xueguang Ma, Qian Liu, Dongfu Jiang, Ge Zhang, Zejun Ma, Wenhu Chen*. [[Paper]](https://arxiv.org/abs/2505.14652) [[PDF]](https://arxiv.org/pdf/2505.14652) ![](https://img.shields.io/badge/year-2025-orange)
 - **Rewarding Graph Reasoning Process makes LLMs more Generalized Reasoners**. *Miao Peng, Nuo Chen, Zongrui Suo, Jia Li*. [[Paper]](https://arxiv.org/abs/2503.00845) [[PDF]](https://arxiv.org/pdf/2503.00845) ![](https://img.shields.io/badge/year-2025-orange)
 
 ##### Policy Optimization
 
-> Change how rewards become updates: advantage correction, external solutions, and gradient or sharpness regularization.
+> Modify the policy update itself: advantage modification, token weighting, and gradient regularization.
 
+- **Beyond Entropy: Correctness-Aware Advantage Shaping via Contrastive Policy Optimization**. *Weiwen Xu, Jia Liu, Hou Pong Chan, Long Li, Deng Cai, Min Chen, Hao Zhang*. [[Paper]](https://arxiv.org/abs/2607.14614) [[PDF]](https://arxiv.org/pdf/2607.14614) ![](https://img.shields.io/badge/year-2026-red)
+- **DelTA: Discriminative Token Credit Assignment for Reinforcement Learning from Verifiable Rewards**. *Kaiyi Zhang, Wei Wu, Yankai Lin*. [[Paper]](https://arxiv.org/abs/2605.21467) [[PDF]](https://arxiv.org/pdf/2605.21467) ![](https://img.shields.io/badge/year-2026-red)
 - **Gradient Regularization Mitigates Reward Hacking in Reinforcement Learning from Human Feedback and Verifiable Rewards**. *Johannes Ackermann, Michael Noukhovitch, Takashi Ishida, Masashi Sugiyama*. [[Paper]](https://arxiv.org/abs/2602.18037) [[PDF]](https://arxiv.org/pdf/2602.18037) ![](https://img.shields.io/badge/year-2026-red)
 - **CoRPO: Adding a Correctness Bias to GRPO Improves Generalization**. *Anisha Garg, Claire Zhang, Nishit Neema, David Bick, Ganesh Venkatesh, Joel Hestness*. [[Paper]](https://arxiv.org/abs/2511.04439) [[PDF]](https://arxiv.org/pdf/2511.04439) ![](https://img.shields.io/badge/year-2025-orange)
 - **Sharpness-Guided Group Relative Policy Optimization via Probability Shaping**. *Tue Le, Linh Ngo Van, Trung Le*. [[Paper]](https://arxiv.org/abs/2511.00066) [[PDF]](https://arxiv.org/pdf/2511.00066) ![](https://img.shields.io/badge/year-2025-orange)
-- **RL-PLUS: Countering Capability Boundary Collapse of LLMs in Reinforcement Learning with Hybrid-policy Optimization**. *Yihong Dong, Xue Jiang, Yongding Tao, Huanyu Liu, Kechi Zhang, Lili Mou, Rongyu Cao, Yingwei Ma, Jue Chen, Binhua Li, et al.* [[Paper]](https://arxiv.org/abs/2508.00222) [[PDF]](https://arxiv.org/pdf/2508.00222) ![](https://img.shields.io/badge/year-2025-orange)
 
 #### Post-Training: Hybrid Training
 
@@ -265,6 +274,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 - **GAC: Noise-Aware Adaptive Mixing for Hybrid SFT-RL Post-Training**. *Yuelin Hu, Zhenbo Yu, Zhengxue Cheng, Wei Liu, Li Song*. [[Paper]](https://arxiv.org/abs/2605.26184) [[PDF]](https://arxiv.org/pdf/2605.26184) ![](https://img.shields.io/badge/year-2026-red)
 - **Bridging SFT and RL: Dynamic Policy Optimization for Robust Reasoning**. *Taojie Zhu, Dongyang Xu, Ding Zou, Sen Zhao, Qiaobo Hao, Zhiguo Yang, Yonghong He*. [[Paper]](https://arxiv.org/abs/2604.08926) [[PDF]](https://arxiv.org/pdf/2604.08926) ![](https://img.shields.io/badge/year-2026-red)
 - **Towards a Unified View of Large Language Model Post-Training**. *Xingtai Lv, Yuxin Zuo, Youbang Sun, Hongyi Liu, Yuntian Wei, Zhekai Chen, Xuekai Zhu, Kaiyan Zhang, Bingning Wang, Ning Ding, Bowen Zhou*. [[Paper]](https://arxiv.org/abs/2509.04419) [[PDF]](https://arxiv.org/pdf/2509.04419) ![](https://img.shields.io/badge/year-2025-orange)
+- **RL-PLUS: Countering Capability Boundary Collapse of LLMs in Reinforcement Learning with Hybrid-policy Optimization**. *Yihong Dong, Xue Jiang, Yongding Tao, Huanyu Liu, Kechi Zhang, Lili Mou, Rongyu Cao, Yingwei Ma, Jue Chen, Binhua Li, et al.* [[Paper]](https://arxiv.org/abs/2508.00222) [[PDF]](https://arxiv.org/pdf/2508.00222) ![](https://img.shields.io/badge/year-2025-orange)
 - **Blending Supervised and Reinforcement Fine-Tuning with Prefix Sampling**. *Zeyu Huang, Tianhao Cheng, Zihan Qiu, Zili Wang, Yinghui Xu, Edoardo M. Ponti, Ivan Titov*. [[Paper]](https://arxiv.org/abs/2507.01679) [[PDF]](https://arxiv.org/pdf/2507.01679) ![](https://img.shields.io/badge/year-2025-orange)
 - **SRFT: A Single-Stage Method with Supervised and Reinforcement Fine-Tuning for Reasoning**. *Yuqian Fu, Tinghong Chen, Jiajun Chai, Xihuai Wang, Songjun Tu, Guojun Yin, Wei Lin, Qichao Zhang, Yuanheng Zhu, Dongbin Zhao*. [[Paper]](https://arxiv.org/abs/2506.19767) [[PDF]](https://arxiv.org/pdf/2506.19767) ![](https://img.shields.io/badge/year-2025-orange)
 - **Learning What Reinforcement Learning Can't: Interleaved Online Fine-Tuning for Hardest Questions**. *Lu Ma, Hao Liang, Meiyi Qiang, Lexiang Tang, Xiaochen Ma, Zhen Hao Wong, Junbo Niu, Chengyu Shen, Runming He, Yanhao Li, Bin Cui, Wentao Zhang*. [[Paper]](https://arxiv.org/abs/2506.07527) [[PDF]](https://arxiv.org/pdf/2506.07527) ![](https://img.shields.io/badge/year-2025-orange)
@@ -272,15 +282,15 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ### Inference for Generalization
 
-*How can a fixed model be deployed on unfamiliar problems by changing computation at test time, and where does that stop helping?*
+*How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping?*
 
 #### Trajectory Restructuring
 
-*Impose structural priors on the reasoning trajectory without updating weights.*
+*Organize free-form generation without updating model weights.*
 
 ##### Structural Decomposition
 
-> Split long or hard problems into units that are solved in sequence or by independent micro-steps.
+> Break complex reasoning into manageable steps, solved in sequence, by micro-agents, or with predefined atomic skills.
 
 - **Solving a Million-Step LLM Task with Zero Errors**. *Elliot Meyerson, Giuseppe Paolo, Roberto Dailey, Hormoz Shahrzad, Olivier Francon, Conor F. Hayes, Xin Qiu, Babak Hodjat, Risto Miikkulainen*. [[Paper]](https://arxiv.org/abs/2511.09030) [[PDF]](https://arxiv.org/pdf/2511.09030) ![](https://img.shields.io/badge/year-2025-orange)
 - **An Examination on the Effectiveness of Divide-and-Conquer Prompting in Large Language Models**. *Yizhou Zhang, Lun Du, Defu Cao, Qiang Fu, Yan Liu*. [[Paper]](https://arxiv.org/abs/2402.05359) [[PDF]](https://arxiv.org/pdf/2402.05359) ![](https://img.shields.io/badge/year-2024-yellow)
@@ -289,7 +299,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Upfront Structural Injection
 
-> Fix constraints, a task-specific procedure, query-specific demonstrations, or hints before reasoning begins.
+> Constrain generation in advance: restrict valid answers, construct task-specific procedures, synthesize query-specific demonstrations, or supply hints.
 
 - **Constraint-First Reasoning: A Training-Free Protocol for Exploiting Answer-Space Constraints in Mathematical Problem Solving**. *Hongbo Ma, Bangji Yang, Yunqian Selina Cheng, Jiajun Fan, Hanwen Zhang, Ge Liu*. [[Paper]](https://arxiv.org/abs/2608.05254) [[PDF]](https://arxiv.org/pdf/2608.05254) ![](https://img.shields.io/badge/year-2026-red)
 - **Test-Time Hinting for Black-Box Vision-Language Models**. *Kaihua Hou, Abhijith Varma Mudunuri, Jiaxing Qiu, Roxana Daneshjou, Thomas Hartvigsen, Ahmed Alaa*. [[Paper]](https://arxiv.org/abs/2605.16410) [[PDF]](https://arxiv.org/pdf/2605.16410) ![](https://img.shields.io/badge/year-2026-red)
@@ -298,30 +308,29 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Compute Scaling
 
-*Allocate additional test-time compute to explore alternative paths or to revise defective ones.*
+*When one trajectory is insufficient, use extra test-time compute to explore alternatives or revise errors.*
 
 ##### Search Expansion and Allocation
 
-> Direct search toward promising branches and balance exploration against revision by estimated difficulty.
+> Guide exploration with process-level signals and allocate compute by estimated difficulty.
 
-- **Exploration-Driven Optimization for Test-Time Large Language Model Reasoning**. *Changhao Li, Yuchen Zhuang, Chenxiao Gao, Haotian Sun, Rushi Qiang, Chao Zhang, Bo Dai*. [[Paper]](https://arxiv.org/abs/2605.09853) [[PDF]](https://arxiv.org/pdf/2605.09853) ![](https://img.shields.io/badge/year-2026-red)
 - **Boosting Policy and Process Reward Models with Monte Carlo Tree Search in Open-Domain QA**. *Chi-Min Chan, Chunpu Xu, Junqi Zhu, Jiaming Ji, Donghai Hong, Pengcheng Wen, Chunyang Jiang, Zhen Ye, Yaodong Yang, Wei Xue, Sirui Han, Yike Guo*. [[Paper]](https://aclanthology.org/2025.findings-acl.388/) [[PDF]](https://aclanthology.org/2025.findings-acl.388.pdf) ![](https://img.shields.io/badge/year-2025-orange)
 - **Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters**. *Charlie Snell, Jaehoon Lee, Kelvin Xu, Aviral Kumar*. [[Paper]](https://arxiv.org/abs/2408.03314) [[PDF]](https://arxiv.org/pdf/2408.03314) ![](https://img.shields.io/badge/year-2024-yellow)
+- **ReST-MCTS*: LLM Self-Training via Process Reward Guided Tree Search**. *Dan Zhang, Sining Zhoubian, Ziniu Hu, Yisong Yue, Yuxiao Dong, Jie Tang*. [[Paper]](https://arxiv.org/abs/2406.03816) [[PDF]](https://arxiv.org/pdf/2406.03816) ![](https://img.shields.io/badge/year-2024-yellow)
 
 ##### Targeted Revision
 
-> Concentrate computation on localized faulty steps instead of regenerating the whole solution.
+> Concentrate computation on faulty reasoning steps instead of regenerating the whole solution.
 
 - **Test-Time Scaling via Error Localization**. *Rajiv Shailesh Chitale, Rahul Madhavan, Taneesh Gupta, Deepanway Ghosal, Aravindan Raghuveer*. [[Paper]](https://arxiv.org/abs/2607.21453) [[PDF]](https://arxiv.org/pdf/2607.21453) ![](https://img.shields.io/badge/year-2026-red)
-- **Improving Latent Generalization Using Test-time Compute**. *Arslan Chaudhry, Sridhar Thiagarajan, Andrew Lampinen*. [[Paper]](https://arxiv.org/abs/2604.01430) [[PDF]](https://arxiv.org/pdf/2604.01430) ![](https://img.shields.io/badge/year-2026-red)
 
 #### State Assessment
 
-*Decide which intermediate reasoning states remain trustworthy under distribution shift.*
+*Estimate the reliability of intermediate reasoning to guide selection or further computation.*
 
 ##### Internal State Assessment
 
-> Use hidden-state and uncertainty signals to continue, switch strategy, stop, or recalibrate online.
+> Residual-stream trajectories, uncertainty-progress alignment, calibrated stopping, and online recalibration under shift.
 
 - **Reasoning Errors Have a Region and a Direction in the Residual-Stream Trajectory of LLMs**. *Hamed Damirchi, Ignacio Meza De la Jara, Damith Ranasinghe, Yuhang Liu, Javen Shi*. [[Paper]](https://arxiv.org/abs/2608.05660) [[PDF]](https://arxiv.org/pdf/2608.05660) ![](https://img.shields.io/badge/year-2026-red)
 - **UPAIR: Diagnosing Reasoning States via Uncertainty-Progress Alignment for Selective Intervention**. *Cheng Yan, Zhijun Fan, Guangyang Ye, Fan Xu, Xiang Xia, Yawei Wang, Wuyang Zhang*. [[Paper]](https://arxiv.org/abs/2607.17188) [[PDF]](https://arxiv.org/pdf/2607.17188) ![](https://img.shields.io/badge/year-2026-red)
@@ -330,18 +339,19 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Verifier-Mediated Assessment
 
-> Use auxiliary verifiers to select candidates or to build pseudo-labels for test-time training.
+> Auxiliary verifiers or process reward models for candidate selection or test-time adaptation, which may themselves generalize poorly.
 
 - **Continuous Self-Improvement of Large Language Models by Test-time Training with Verifier-Driven Sample Selection**. *Mohammad Mahdi Moradi, Hossam Amer, Sudhir Mudur, Weiwei Zhang, Yang Liu, Walid Ahmed*. [[Paper]](https://arxiv.org/abs/2505.19475) [[PDF]](https://arxiv.org/pdf/2505.19475) ![](https://img.shields.io/badge/year-2025-orange)
 - **Putting the Value Back in RL: Better Test-Time Scaling by Unifying LLM Reasoners With Verifiers**. *Kusha Sareen, Morgane M Moss, Alessandro Sordoni, Rishabh Agarwal, Arian Hosseini*. [[Paper]](https://arxiv.org/abs/2505.04842) [[PDF]](https://arxiv.org/pdf/2505.04842) ![](https://img.shields.io/badge/year-2025-orange)
+- **Retrieval-Augmented Process Reward Model for Generalizable Mathematical Reasoning**. *Jiachen Zhu, Congmin Zheng, Jianghao Lin, Kounianhua Du, Ying Wen, Yong Yu, Jun Wang, Weinan Zhang*. [[Paper]](https://arxiv.org/abs/2502.14361) [[PDF]](https://arxiv.org/pdf/2502.14361) ![](https://img.shields.io/badge/year-2025-orange)
 
 #### Inference-Time Externalization
 
-*Move working state, exact operations, or accumulated experience outside a single forward reasoning process.*
+*Give inference access to working state or computation beyond the model's internal state.*
 
 ##### Within-Episode Externalization
 
-> External memory, abstract reasoning with tool-supplied values, and decisions about when a tool is needed.
+> Interactive memory, abstract reasoning with tool-supplied values, and decisions about when a tool is needed.
 
 - **To Infinity and Beyond: Tool-Use Unlocks Length Generalization in State Space Models**. *Eran Malach, Omid Saremi, Sinead Williamson, Arwen Bradley, Aryo Lotfi, Emmanuel Abbe, Josh Susskind, Etai Littwin*. [[Paper]](https://arxiv.org/abs/2510.14826) [[PDF]](https://arxiv.org/pdf/2510.14826) ![](https://img.shields.io/badge/year-2025-orange)
 - **SMART: Self-Aware Agent for Tool Overuse Mitigation**. *Cheng Qian, Emre Can Acikgoz, Hongru Wang, Xiusi Chen, Avirup Sil, Dilek Hakkani-Tür, Gokhan Tur, Heng Ji*. [[Paper]](https://arxiv.org/abs/2502.11435) [[PDF]](https://arxiv.org/pdf/2502.11435) ![](https://img.shields.io/badge/year-2025-orange)
@@ -357,15 +367,15 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ### Architecture for Generalization
 
-*Which computational structures let a learned operation be reused at greater length, depth, or compositional complexity?*
+*Which computational structures let a learned operation be reused when problems grow longer or combine familiar steps in new ways?*
 
 #### Recurrent Depth
 
-*Apply a shared transformation repeatedly within one prediction.*
+*Apply a shared transformation repeatedly, increasing computation without a separate parameter set at each depth.*
 
 ##### Weight Sharing
 
-> Universal and looped transformers, recurrence over facts or tool calls, and recurrent blocks retrofitted into pretrained models.
+> Universal and looped transformers, recurrence over facts, graphs, or tool calls, and shared blocks retrofitted into pretrained models.
 
 - **Universal Transformers for Circuit Computations: Perfect Length Generalization in Tiny Transformers**. *Takuya Ito, Ruchir Puri, Murray Campbell, Parikshit Ram*. [[Paper]](https://arxiv.org/abs/2608.31067) [[PDF]](https://arxiv.org/pdf/2608.31067) ![](https://img.shields.io/badge/year-2026-red)
 - **Looped Language Models Improve Compositional Tool Calling**. *Andrei Cristian Popescu, Haitz Sáez de Ocáriz Borde, Pietro Liò*. [[Paper]](https://arxiv.org/abs/2608.18171) [[PDF]](https://arxiv.org/pdf/2608.18171) ![](https://img.shields.io/badge/year-2026-red)
@@ -379,34 +389,27 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ##### Adaptive Computation
 
-> Learned controllers that choose how many iterations, layers, or latent passes an input receives.
+> Learned control of how many iterations, layers, or latent passes an input receives, and the stability that keeps extra iterations from drifting.
 
+- **Think Shallow, Solve Deep: Controlling Recurrent Dynamics for Reliable Test-Time Depth**. *Ivan Viakhirev, Kirill Borodin, Amirah Almutairi, Serguei Barannikov, Maxim Abramov, Grach Mkrtchian*. [[Paper]](https://arxiv.org/abs/2608.18222) [[PDF]](https://arxiv.org/pdf/2608.18222) ![](https://img.shields.io/badge/year-2026-red)
 - **Stabilizing Extrapolation in Looped Transformers via Learned Stochastic Stopping**. *Hsun-Yu Kuo, El Mahdi Chayti, Patrik Reizinger, Wieland Brendel, Martin Jaggi*. [[Paper]](https://arxiv.org/abs/2606.29983) [[PDF]](https://arxiv.org/pdf/2606.29983) ![](https://img.shields.io/badge/year-2026-red)
+- **Fixed-Point Reasoners: Stable and Adaptive Deep Looped Transformers**. *Sajad Movahedi, Vera Milovanović, Shlomo Libo Feigin, Alexander Theus, Thomas Hofmann, Valentina Boeva, T. Konstantin Rusch, Antonio Orvieto*. [[Paper]](https://arxiv.org/abs/2606.18206) [[PDF]](https://arxiv.org/pdf/2606.18206) ![](https://img.shields.io/badge/year-2026-red)
 - **Skip a Layer or Loop It? Learning Program-of-Layers in LLMs**. *Ziyue Li, Yang Li, Tianyi Zhou*. [[Paper]](https://arxiv.org/abs/2606.06574) [[PDF]](https://arxiv.org/pdf/2606.06574) ![](https://img.shields.io/badge/year-2026-red)
+- **Equilibrium Reasoners: Learning Attractors Enables Scalable Reasoning**. *Benhao Huang, Zhengyang Geng, Zico Kolter*. [[Paper]](https://arxiv.org/abs/2605.21488) [[PDF]](https://arxiv.org/pdf/2605.21488) ![](https://img.shields.io/badge/year-2026-red)
+- **Stability and Generalization in Looped Transformers**. *Asher Labovich*. [[Paper]](https://arxiv.org/abs/2604.15259) [[PDF]](https://arxiv.org/pdf/2604.15259) ![](https://img.shields.io/badge/year-2026-red)
 - **Adaptive Recurrence as Algorithmic Time for Length Generalization in Addition**. *Imran Ibrahimli, Stefan Wermter, Jae Hee Lee*. [[Paper]](https://openreview.net/forum?id=XW18V4H9sq) [[PDF]](https://openreview.net/pdf?id=XW18V4H9sq) ![](https://img.shields.io/badge/year-2026-red)
 - **Think-at-Hard: Dynamic Looped Transformers for Improved Reasoning**. *Tianyu Fu, Yichen You, Zekai Chen, Guohao Dai, Huazhong Yang, Yu Wang*. [[Paper]](https://arxiv.org/abs/2511.08577) [[PDF]](https://arxiv.org/pdf/2511.08577) ![](https://img.shields.io/badge/year-2025-orange)
 - **Adaptivity and Modularity for Efficient Generalization Over Task Complexity**. *Samira Abnar, Omid Saremi, Laurent Dinh, Shantel Wilson, Miguel Angel Bautista, Chen Huang, Vimal Thilak, Etai Littwin, Jiatao Gu, Josh Susskind, Samy Bengio*. [[Paper]](https://arxiv.org/abs/2310.08866) [[PDF]](https://arxiv.org/pdf/2310.08866) ![](https://img.shields.io/badge/year-2023-lightgrey)
 
-##### Stable Recurrent Dynamics
-
-> Fixed points, attractors, and energy descent that keep extra iterations useful instead of drifting.
-
-- **Think Shallow, Solve Deep: Controlling Recurrent Dynamics for Reliable Test-Time Depth**. *Ivan Viakhirev, Kirill Borodin, Amirah Almutairi, Serguei Barannikov, Maxim Abramov, Grach Mkrtchian*. [[Paper]](https://arxiv.org/abs/2608.18222) [[PDF]](https://arxiv.org/pdf/2608.18222) ![](https://img.shields.io/badge/year-2026-red)
-- **Fixed-Point Reasoners: Stable and Adaptive Deep Looped Transformers**. *Sajad Movahedi, Vera Milovanović, Shlomo Libo Feigin, Alexander Theus, Thomas Hofmann, Valentina Boeva, T. Konstantin Rusch, Antonio Orvieto*. [[Paper]](https://arxiv.org/abs/2606.18206) [[PDF]](https://arxiv.org/pdf/2606.18206) ![](https://img.shields.io/badge/year-2026-red)
-- **Equilibrium Reasoners: Learning Attractors Enables Scalable Reasoning**. *Benhao Huang, Zhengyang Geng, Zico Kolter*. [[Paper]](https://arxiv.org/abs/2605.21488) [[PDF]](https://arxiv.org/pdf/2605.21488) ![](https://img.shields.io/badge/year-2026-red)
-- **Stability and Generalization in Looped Transformers**. *Asher Labovich*. [[Paper]](https://arxiv.org/abs/2604.15259) [[PDF]](https://arxiv.org/pdf/2604.15259) ![](https://img.shields.io/badge/year-2026-red)
-- **Generalizable Reasoning through Compositional Energy Minimization**. *Alexandru Oarga, Yilun Du*. [[Paper]](https://arxiv.org/abs/2510.20607) [[PDF]](https://arxiv.org/pdf/2510.20607) ![](https://img.shields.io/badge/year-2025-orange)
-
 #### Information Routing
 
-*Specify how tokens are addressed, which dependencies attention reaches, and which modules process them.*
+*Determine how tokens are addressed, which dependencies attention can access, and which components process them.*
 
 ##### Positional Encoding
 
 > Encode each token's computational role so that alignment survives longer or differently composed inputs.
 
 - **How Data Shapes RoPE Frequency Usage: From Positional Scale Matching to Length Generalization**. *Xinyi Wu, Siyuan Liu, Ali Jadbabaie*. [[Paper]](https://arxiv.org/abs/2607.07678) [[PDF]](https://arxiv.org/pdf/2607.07678) ![](https://img.shields.io/badge/year-2026-red)
-- **Randomized YaRN Improves Length Generalization for Long-Context Reasoning**. *Manas Mehta, Fangcong Yin, Greg Durrett*. [[Paper]](https://arxiv.org/abs/2606.23687) [[PDF]](https://arxiv.org/pdf/2606.23687) ![](https://img.shields.io/badge/year-2026-red)
 - **Position Encoding with Random Float Sampling Enhances Length Generalization of Transformers**. *Atsushi Shimizu, Shohei Taniguchi, Yutaka Matsuo*. [[Paper]](https://arxiv.org/abs/2602.14050) [[PDF]](https://arxiv.org/pdf/2602.14050) ![](https://img.shields.io/badge/year-2026-red)
 - **Rethinking Addressing in Language Models via Contexualized Equivariant Positional Encoding**. *Jiajun Zhu, Peihao Wang, Ruisi Cai, Jason D. Lee, Pan Li, Zhangyang Wang*. [[Paper]](https://arxiv.org/abs/2501.00712) [[PDF]](https://arxiv.org/pdf/2501.00712) ![](https://img.shields.io/badge/year-2025-orange)
 - **Arithmetic Transformers Can Length-Generalize in Both Operand Length and Count**. *Hanseul Cho, Jaeyoung Cha, Srinadh Bhojanapalli, Chulhee Yun*. [[Paper]](https://arxiv.org/abs/2410.15787) [[PDF]](https://arxiv.org/pdf/2410.15787) ![](https://img.shields.io/badge/year-2024-yellow)
@@ -429,13 +432,14 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 - **What You Can't See Is What You Learn: Slot-Selective Evidence Masking Favors Compositional Generalization in Shared-Genome Language-Model Societies**. *Narcis Marincat*. [[Paper]](https://arxiv.org/abs/2608.20054) [[PDF]](https://arxiv.org/pdf/2608.20054) ![](https://img.shields.io/badge/year-2026-red)
 - **AGEL-Comp: A Neuro-Symbolic Framework for Compositional Generalization in Interactive Agents**. *Mahnoor Shahid, Hannes Rothe*. [[Paper]](https://arxiv.org/abs/2604.26522) [[PDF]](https://arxiv.org/pdf/2604.26522) ![](https://img.shields.io/badge/year-2026-red)
+- **Generalizable Reasoning through Compositional Energy Minimization**. *Alexandru Oarga, Yilun Du*. [[Paper]](https://arxiv.org/abs/2510.20607) [[PDF]](https://arxiv.org/pdf/2510.20607) ![](https://img.shields.io/badge/year-2025-orange)
 - **NeSyCoCo: A Neuro-Symbolic Concept Composer for Compositional Generalization**. *Danial Kamali, Elham J. Barezi, Parisa Kordjamshidi*. [[Paper]](https://arxiv.org/abs/2412.15588) [[PDF]](https://arxiv.org/pdf/2412.15588) ![](https://img.shields.io/badge/year-2024-yellow)
 - **Sparse Mixture-of-Experts for Compositional Generalization: Empirical Evidence and Theoretical Foundations of Optimal Sparsity**. *Jinze Zhao, Peihao Wang, Junjie Yang, Ruisi Cai, Gaowen Liu, Jayanth Srinivasa, Ramana Rao Kompella, Yingbin Liang, Zhangyang Wang*. [[Paper]](https://arxiv.org/abs/2410.13964) [[PDF]](https://arxiv.org/pdf/2410.13964) ![](https://img.shields.io/badge/year-2024-yellow)
 - **Dynamic MOdularized Reasoning for Compositional Structured Explanation Generation**. *Xiyan Fu, Anette Frank*. [[Paper]](https://arxiv.org/abs/2309.07624) [[PDF]](https://arxiv.org/pdf/2309.07624) ![](https://img.shields.io/badge/year-2023-lightgrey)
 
 #### Recurrent Memory
 
-*Carry an explicit state across tokens or reasoning chunks so later computation can reuse earlier results.*
+*Carry an internal state across computation steps so that later steps can reuse earlier information.*
 
 ##### Token-Level Recurrence
 
@@ -454,11 +458,11 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ### Analysis of Generalization
 
-*When does reasoning transfer, and what explains its successes and failures?*
+*What actually transfers under distribution shift, and why?*
 
 #### Behavioral Evidence
 
-*Performance under named shifts: one row of the transfer matrix, not a single OOD score.*
+*Performance under controlled shifts: one row of the transfer matrix, not a single OOD score.*
 
 ##### Compositional Generalization
 
@@ -516,7 +520,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Mechanistic Evidence
 
-*Whether one shared computation or separate shortcuts produce the behavior, mostly in small controlled models.*
+*How internal computation shapes generalization, mostly in small controlled models.*
 
 ##### Shared Circuits
 
@@ -554,7 +558,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Theoretical Evidence
 
-*Results under explicit assumptions that separate expressivity, learnability, and certification.*
+*Results under explicit assumptions that separate what can be represented, learned, and certified.*
 
 ##### Learnability
 
@@ -716,6 +720,7 @@ Resources summarized in Appendix C of the survey. A benchmark is not in or out o
 
 - **A Survey of Inductive Reasoning for Large Language Models**. *Kedi Chen, Dezhao Ruan, Yuhao Dan, Yaoting Wang, Siyu Yan, Xuecheng Wu, Yinqi Zhang, Qin Chen, Jie Zhou, Liang He, et al.* [[Paper]](https://arxiv.org/abs/2510.10182) [[PDF]](https://arxiv.org/pdf/2510.10182) ![](https://img.shields.io/badge/year-2025-orange)
 - **Generalizability of Large Language Model-Based Agents: A Comprehensive Survey**. *Minxing Zhang, Yi Yang, Roy Xie, Bhuwan Dhingra, Shuyan Zhou, Jian Pei*. [[Paper]](https://arxiv.org/abs/2509.16330) [[PDF]](https://arxiv.org/pdf/2509.16330) ![](https://img.shields.io/badge/year-2025-orange)
+- **A Survey on Latent Reasoning**. *Rui-Jie Zhu, Tianhao Peng, Tianhao Cheng, Xingwei Qu, Jinfa Huang, Dawei Zhu, Hao Wang, Kaiwen Xue, Xuanliang Zhang, Yong Shan, et al.* [[Paper]](https://arxiv.org/abs/2507.06203) [[PDF]](https://arxiv.org/pdf/2507.06203) ![](https://img.shields.io/badge/year-2025-orange)
 - **State-of-the-art generalisation research in NLP: A taxonomy and review**. *Dieuwke Hupkes, Mario Giulianelli, Verna Dankers, Mikel Artetxe, Yanai Elazar, Tiago Pimentel, Christos Christodoulopoulos, Karim Lasri, Naomi Saphra, Arabella Sinclair, et al.* [[Paper]](https://arxiv.org/abs/2210.03050) [[PDF]](https://arxiv.org/pdf/2210.03050) ![](https://img.shields.io/badge/year-2022-lightgrey)
 - **Towards Out-Of-Distribution Generalization: A Survey**. *Jiashuo Liu, Zheyan Shen, Yue He, Xingxuan Zhang, Renzhe Xu, Han Yu, Peng Cui*. [[Paper]](https://arxiv.org/abs/2108.13624) [[PDF]](https://arxiv.org/pdf/2108.13624) ![](https://img.shields.io/badge/year-2021-lightgrey)
 

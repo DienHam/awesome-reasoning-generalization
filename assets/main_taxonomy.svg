@@ -70,14 +70,14 @@
   <line x1="990" y1="118" x2="1012" y2="118" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1020" y="93" width="1345" height="50" rx="12" fill="#faf8ff" stroke="#c7b8ef" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="112" class="leaf-head" fill="#5b21b6">Data Curation  •  Optimizer Design</text>
-  <text x="1040" y="133" class="leaf-text">Training-Stage Interplay; Grokking in the Wild; Axiomatic Training; Nexus; Complexity Control</text>
+  <text x="1040" y="133" class="leaf-text">Training-stage interplay; Grokked Transformers; Grokking in the Wild; Nexus; initialization scale; complexity control</text>
   <line x1="628" y1="174" x2="644" y2="174" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="652" y="154" width="330" height="40" rx="10" fill="#f7f4ff" stroke="#7c3aed" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="181" class="branch" text-anchor="middle" fill="#5b21b6">Mid-training</text>
   <line x1="990" y1="174" x2="1012" y2="174" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1020" y="149" width="1345" height="50" rx="12" fill="#faf8ff" stroke="#c7b8ef" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="168" class="leaf-head" fill="#5b21b6">Continued Pre-Training  •  Intermediate Fine-Tuning</text>
-  <text x="1040" y="189" class="leaf-text">DeepSeekMath; Biological Reasoning Models; Additional Logic Training; Reasoning Paradigms; Warm Up Before You Train</text>
+  <text x="1040" y="189" class="leaf-text">DeepSeekMath; biological reasoning models; Randomized YaRN; Additional Logic Training; reasoning paradigms</text>
   <line x1="628" y1="286" x2="644" y2="286" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="652" y="266" width="330" height="40" rx="10" fill="#f7f4ff" stroke="#7c3aed" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="293" class="branch" text-anchor="middle" fill="#5b21b6">Post-training</text>
@@ -89,21 +89,21 @@
   <line x1="1358" y1="230" x2="1382" y2="230" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1390" y="205" width="975" height="50" rx="12" fill="#faf8ff" stroke="#c7b8ef" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1410" y="224" class="leaf-head" fill="#5b21b6">Problem-Level Methods  •  Solution-Level Methods  •  Objective-Level Methods</text>
-  <text x="1410" y="245" class="leaf-text">MEND; STEPS; Self-Improving Transformers; Theorem-SFT; Meta-RFFT; TAIL; Composable CoT; GEOSD; IGA</text>
+  <text x="1410" y="245" class="leaf-text">MEND; STEPS; Chain-of-Meta-Thought; Composable CoT; Meta-RFFT; RP-OPSD; GEOSD</text>
   <line x1="1000" y1="286" x2="1012" y2="286" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1020" y="266" width="330" height="40" rx="10" fill="#f7f4ff" stroke="#7c3aed" stroke-width="2.6" filter="url(#sketchy)"/>
   <text x="1185" y="293" class="branch" text-anchor="middle" fill="#5b21b6">Reinforcement learning</text>
   <line x1="1358" y1="286" x2="1382" y2="286" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1390" y="261" width="975" height="50" rx="12" fill="#faf8ff" stroke="#c7b8ef" stroke-width="2.4" filter="url(#sketchy)"/>
-  <text x="1410" y="280" class="leaf-head" fill="#5b21b6">Scope and Limits of RL Transfer  •  Environment Design  •  Reward Design  •  Policy Optimization</text>
-  <text x="1410" y="301" class="leaf-text">SFT Memorizes, RL Generalizes; pass@k boundary; SynLogic; RACES; h1; GraphPRM; GRAIN; CoRPO</text>
+  <text x="1410" y="280" class="leaf-head" fill="#5b21b6">Environment Design  •  Reward Design  •  Policy Optimization</text>
+  <text x="1410" y="301" class="leaf-text">SFT vs. RL; SynLogic; h1; GraphPRM; GRAIN; Rubric-Grounded RL; CoRPO; DelTA</text>
   <line x1="1000" y1="342" x2="1012" y2="342" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1020" y="322" width="330" height="40" rx="10" fill="#f7f4ff" stroke="#7c3aed" stroke-width="2.6" filter="url(#sketchy)"/>
   <text x="1185" y="349" class="branch" text-anchor="middle" fill="#5b21b6">Hybrid training</text>
   <line x1="1358" y1="342" x2="1382" y2="342" stroke="#7c3aed" stroke-width="3" marker-end="url(#arrow-purple)"/>
   <rect x="1390" y="317" width="975" height="50" rx="12" fill="#faf8ff" stroke="#c7b8ef" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1410" y="336" class="leaf-head" fill="#5b21b6">Sequential Training  •  Joint Training</text>
-  <text x="1410" y="357" class="leaf-text">X-Reasoner; ReasonXL; Rejuvenation; SFT-then-RL baseline audit; LUFFY; Prefix-RFT; SRFT; HPT</text>
+  <text x="1410" y="357" class="leaf-text">X-Reasoner; ReasonXL; Rejuvenation; LUFFY; Prefix-RFT; SRFT; SFT-then-RL baseline audit</text>
 
   <!-- Inference for Generalization -->
   <line x1="282" y1="528" x2="304" y2="528" stroke="#3b82d0" stroke-width="4" marker-end="url(#arrow-blue)"/>
@@ -118,28 +118,28 @@
   <line x1="990" y1="444" x2="1012" y2="444" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="1020" y="419" width="1345" height="50" rx="12" fill="#f7fbff" stroke="#abccee" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="438" class="leaf-head" fill="#1e40af">Structural Decomposition  •  Upfront Structural Injection</text>
-  <text x="1040" y="459" class="leaf-text">Least-to-Most; Skills-in-Context; million-step decomposition; Self-Discover; Constraint-First; Test-Time Hinting</text>
+  <text x="1040" y="459" class="leaf-text">Least-to-Most; Skills-in-Context; MAKER; Self-Discover; Self-Demos; Test-Time Hinting</text>
   <line x1="628" y1="500" x2="644" y2="500" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="652" y="480" width="330" height="40" rx="10" fill="#f4f9ff" stroke="#3b82d0" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="507" class="branch" text-anchor="middle" fill="#1e40af">Compute scaling</text>
   <line x1="990" y1="500" x2="1012" y2="500" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="1020" y="475" width="1345" height="50" rx="12" fill="#f7fbff" stroke="#abccee" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="494" class="leaf-head" fill="#1e40af">Search Expansion and Allocation  •  Targeted Revision</text>
-  <text x="1040" y="515" class="leaf-text">PRM-guided MCTS; compute-optimal test-time scaling; error-localized scaling; latent test-time compute</text>
+  <text x="1040" y="515" class="leaf-text">ReST-MCTS*; PRM-guided MCTS; compute-optimal test-time scaling; error-localized test-time scaling</text>
   <line x1="628" y1="556" x2="644" y2="556" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="652" y="536" width="330" height="40" rx="10" fill="#f4f9ff" stroke="#3b82d0" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="563" class="branch" text-anchor="middle" fill="#1e40af">State assessment</text>
   <line x1="990" y1="556" x2="1012" y2="556" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="1020" y="531" width="1345" height="50" rx="12" fill="#f7fbff" stroke="#abccee" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="550" class="leaf-head" fill="#1e40af">Internal State Assessment  •  Verifier-Mediated Assessment</text>
-  <text x="1040" y="571" class="leaf-text">Residual-stream error directions; UPAIR; thought calibration; ORCA; joint reasoner-verifier; VDS-TTT</text>
+  <text x="1040" y="571" class="leaf-text">UPAIR; Thought Calibration; ORCA; joint reasoner-verifier; retrieval-augmented PRM</text>
   <line x1="628" y1="612" x2="644" y2="612" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="652" y="592" width="330" height="40" rx="10" fill="#f4f9ff" stroke="#3b82d0" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="619" class="branch" text-anchor="middle" fill="#1e40af">Externalization</text>
   <line x1="990" y1="612" x2="1012" y2="612" stroke="#3b82d0" stroke-width="3" marker-end="url(#arrow-blue)"/>
   <rect x="1020" y="587" width="1345" height="50" rx="12" fill="#f7fbff" stroke="#abccee" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="606" class="leaf-head" fill="#1e40af">Within-Episode Externalization  •  Cross-Episode Externalization</text>
-  <text x="1040" y="627" class="leaf-text">Tool use for length transfer; Chain-of-Abstraction; TECTON; SMART; ReasoningBank; MILES</text>
+  <text x="1040" y="627" class="leaf-text">Tool-use memory for length transfer; Chain-of-Abstraction; SMART; ReasoningBank; MILES</text>
 
   <!-- Architecture for Generalization -->
   <line x1="282" y1="770" x2="304" y2="770" stroke="#2d8a4e" stroke-width="4" marker-end="url(#arrow-green)"/>
@@ -153,22 +153,22 @@
   <text x="817" y="721" class="branch" text-anchor="middle" fill="#065f46">Recurrent depth</text>
   <line x1="990" y1="714" x2="1012" y2="714" stroke="#2d8a4e" stroke-width="3" marker-end="url(#arrow-green)"/>
   <rect x="1020" y="689" width="1345" height="50" rx="12" fill="#f6fcf8" stroke="#a5d5b5" stroke-width="2.4" filter="url(#sketchy)"/>
-  <text x="1040" y="708" class="leaf-head" fill="#065f46">Weight Sharing  •  Adaptive Computation  •  Stable Recurrent Dynamics</text>
-  <text x="1040" y="729" class="leaf-text">Universal and Looped Transformers; Loop, Think, &amp; Generalize; retrofitted recurrence; PoLar; Think-at-Hard; Equilibrium Reasoners</text>
+  <text x="1040" y="708" class="leaf-head" fill="#065f46">Weight Sharing  •  Adaptive Computation</text>
+  <text x="1040" y="729" class="leaf-text">Universal Transformer; Looped Transformers; Loop, Think, &amp; Generalize; PoLar; Think-at-Hard</text>
   <line x1="628" y1="770" x2="644" y2="770" stroke="#2d8a4e" stroke-width="3" marker-end="url(#arrow-green)"/>
   <rect x="652" y="750" width="330" height="40" rx="10" fill="#f3fbf6" stroke="#2d8a4e" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="777" class="branch" text-anchor="middle" fill="#065f46">Information routing</text>
   <line x1="990" y1="770" x2="1012" y2="770" stroke="#2d8a4e" stroke-width="3" marker-end="url(#arrow-green)"/>
   <rect x="1020" y="745" width="1345" height="50" rx="12" fill="#f6fcf8" stroke="#a5d5b5" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="764" class="leaf-head" fill="#065f46">Positional Encoding  •  Attention Patterns  •  Modular Reasoning</text>
-  <text x="1040" y="785" class="leaf-text">Position Coupling; Abacus embeddings; TAPE; Randomized YaRN; attention bias calibration; RegularGPT; MORSE; sparse MoE</text>
+  <text x="1040" y="785" class="leaf-text">Position Coupling; Abacus; TAPE; RegularGPT; attention bias calibration; MORSE; sparse mixture-of-experts</text>
   <line x1="628" y1="826" x2="644" y2="826" stroke="#2d8a4e" stroke-width="3" marker-end="url(#arrow-green)"/>
   <rect x="652" y="806" width="330" height="40" rx="10" fill="#f3fbf6" stroke="#2d8a4e" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="833" class="branch" text-anchor="middle" fill="#065f46">Recurrent memory</text>
   <line x1="990" y1="826" x2="1012" y2="826" stroke="#2d8a4e" stroke-width="3" marker-end="url(#arrow-green)"/>
   <rect x="1020" y="801" width="1345" height="50" rx="12" fill="#f6fcf8" stroke="#a5d5b5" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="820" class="leaf-head" fill="#065f46">Token-Level Recurrence  •  Chunk-Level Recurrence</text>
-  <text x="1040" y="841" class="leaf-text">Rational Transductors; SST V2; fast-slow latent recurrence; Thinking States; PENCIL universal computer</text>
+  <text x="1040" y="841" class="leaf-text">Rational Transductors; SST V2; fast-slow latent recurrence; Thinking States</text>
 
   <!-- Analysis of Generalization -->
   <line x1="282" y1="984" x2="304" y2="984" stroke="#d27a0a" stroke-width="4" marker-end="url(#arrow-orange)"/>
@@ -183,21 +183,21 @@
   <line x1="990" y1="928" x2="1012" y2="928" stroke="#d27a0a" stroke-width="3" marker-end="url(#arrow-orange)"/>
   <rect x="1020" y="903" width="1345" height="50" rx="12" fill="#fffdf7" stroke="#efc982" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="922" class="leaf-head" fill="#92400e">Compositional Generalization  •  Length, Depth, and Difficulty  •  Prior Exposure</text>
-  <text x="1040" y="943" class="leaf-text">Faith and Fate; MathGAP; Compositional-ARC; length generalization but not robustly; shortest path; GSM-Symbolic; Reversal Curse</text>
+  <text x="1040" y="943" class="leaf-text">Faith and Fate; compositionality gap; length generalization but not robustly; depth generalization; Reasoning or Reciting; Reversal Curse</text>
   <line x1="628" y1="984" x2="644" y2="984" stroke="#d27a0a" stroke-width="3" marker-end="url(#arrow-orange)"/>
   <rect x="652" y="964" width="330" height="40" rx="10" fill="#fffaf0" stroke="#d27a0a" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="991" class="branch" text-anchor="middle" fill="#92400e">Mechanistic evidence</text>
   <line x1="990" y1="984" x2="1012" y2="984" stroke="#d27a0a" stroke-width="3" marker-end="url(#arrow-orange)"/>
   <rect x="1020" y="959" width="1345" height="50" rx="12" fill="#fffdf7" stroke="#efc982" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="978" class="leaf-head" fill="#92400e">Shared Circuits  •  Interfaces Between Steps  •  Learning Dynamics</text>
-  <text x="1040" y="999" class="leaf-text">Shared circuits; decompiling to RASP; Hopping Too Late; two-hop interfaces; grokked transformers; critical windows</text>
+  <text x="1040" y="999" class="leaf-text">Shared circuits; Is grokking worthwhile?; Hopping Too Late; Grokked Transformers; RL heals OOD forgetting</text>
   <line x1="628" y1="1040" x2="644" y2="1040" stroke="#d27a0a" stroke-width="3" marker-end="url(#arrow-orange)"/>
   <rect x="652" y="1020" width="330" height="40" rx="10" fill="#fffaf0" stroke="#d27a0a" stroke-width="3" filter="url(#sketchy)"/>
   <text x="817" y="1047" class="branch" text-anchor="middle" fill="#92400e">Theoretical evidence</text>
   <line x1="990" y1="1040" x2="1012" y2="1040" stroke="#d27a0a" stroke-width="3" marker-end="url(#arrow-orange)"/>
   <rect x="1020" y="1015" width="1345" height="50" rx="12" fill="#fffdf7" stroke="#efc982" stroke-width="2.4" filter="url(#sketchy)"/>
   <text x="1040" y="1034" class="leaf-head" fill="#92400e">Learnability  •  Certification</text>
-  <text x="1040" y="1055" class="leaf-text">Globality barrier; shortcuts to automata; RASP-L; Curriculum II; length-generalization bounds; algebraic decomposition</text>
+  <text x="1040" y="1055" class="leaf-text">Globality barrier; shortcuts to automata; RASP-L; length-generalization bounds; quantitative bounds</text>
 
-  <text x="2380" y="1136" class="tiny" text-anchor="end">Corpus: 233 studies (208 discussed in the survey + 25 from the same screening)  •  2023 and earlier: 21  •  2024: 34  •  2025: 68  •  2026: 110  •  Updated 2026-10-07</text>
+  <text x="2380" y="1136" class="tiny" text-anchor="end">List: 239 studies (212 discussed in the survey + 27 from the same screening)  •  2023 and earlier: 21  •  2024: 35  •  2025: 71  •  2026: 112  •  Updated 2026-10-11</text>
 </svg>

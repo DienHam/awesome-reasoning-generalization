@@ -8,7 +8,7 @@ import re
 from collections import Counter
 from pathlib import Path
 
-from taxonomy import TAXONOMY
+from taxonomy import TAXONOMY, section_index
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,7 +16,7 @@ MANIFEST = ROOT / "data" / "paper_manifest.tsv"
 RESOURCES = ROOT / "data" / "resources.tsv"
 OUTPUT = ROOT / "README.md"
 
-UPDATED = "7 October 2026"
+UPDATED = "11 October 2026"
 SEARCH_DATE = "10 September 2026"
 MAX_AUTHORS = 12
 
@@ -26,12 +26,17 @@ YEAR_BADGE_COLOR = {
     "2024": "yellow",
 }
 
-CLAIM_ELEMENTS = [
-    ("Task and fixed unit", "What is solved, and which components stay constant: weights, prompt, controller, verifier, memory, or tools?"),
-    ("Reference exposure", 'Which stage defines "seen": pre-training, mid-training, SFT or distillation, RL, or test-time adaptation?'),
-    ("Test shift", "Which axis moves: instance, surface form, composition, length or depth, difficulty, task or domain, language or modality, environment or tool, or required knowledge?"),
-    ("Evidence", "How is transfer shown: behavioral outcomes, representational associations, causal interventions, or formal results under explicit assumptions?"),
+CLAIM_FIELDS = [
+    ("Reasoning task", "Generator or dataset, target output, metric, and relevant constraints", "Treating a broad benchmark score as evidence about one reasoning process"),
+    ("Reference exposure", "Pre-training knowledge if available; all continued-training, SFT, distillation, RL, and adaptation data", "Calling an item unseen only because it was absent from the last training stage"),
+    ("Evaluated components", "Whether weights, prompts, exemplars, controller, verifier, memory, retriever, and tools remain fixed", "Attributing gains from inference methods or external resources to changes in learned model capabilities"),
+    ("Test shift", "Named axis, construction method, distance or level, and matched ID control", "Combining instance, surface, composition, length, and domain shifts into one OOD label"),
+    ("Outcome and evidence", "Performance with uncertainty, generalization gap when comparable, mechanism test if claimed", "Treating a probe, score change, or finite test range as stronger evidence than it provides"),
+    ("Inference cost", "Samples, generated tokens, tool calls, wall time or FLOPs, and stopping rule", "Reporting an accuracy gain that follows only from unbounded extra computation"),
 ]
+
+# Corpus statistics reported in Appendix A of the survey (core studies only; contextual methods excluded).
+SURVEY_CORPUS = {"total": 169, "training": 46, "inference": 14, "architecture": 21, "analysis": 88}
 
 PILLAR_BRANCHES = {
     "training": "Pre-training, mid-training, and post-training (SFT, RL, hybrid)",
@@ -117,7 +122,7 @@ def build() -> str:
     by_leaf: dict[str, list[dict[str, str]]] = {}
     for row in core:
         by_leaf.setdefault(row["taxonomy_id"], []).append(row)
-    known = {f"{p.id}.{s.id}.{leaf.id}" for p in TAXONOMY for s in p.sections for leaf in s.leaves}
+    known = {f"{p.id}.{s.id}.{leaf.id}" for p in TAXONOMY for s in p.sections for leaf in s.leaves} | set(section_index())
     unknown = sorted(set(by_leaf) - known)
     if unknown:
         raise ValueError(f"Manifest uses unknown taxonomy ids: {unknown}")
@@ -139,16 +144,20 @@ def build() -> str:
         "</div>",
         "",
         (
-            f"> **Status:** Updated on {UPDATED} to follow the latest version of the survey (literature search through {SEARCH_DATE}). "
-            f"The list contains {len(core)} studies organized by the survey's taxonomy: {in_survey} discussed in the survey "
-            f"and {len(core) - in_survey} more from the same screening. By first arXiv posting, {years['2026']} are from 2026, "
-            f"{years['2025']} from 2025, {years['2024']} from 2024, and {earlier} are earlier foundations."
+            f"> **Status:** Updated on {UPDATED} to follow the complete version of the survey (literature search through {SEARCH_DATE}). "
+            f"The survey's corpus has {SURVEY_CORPUS['total']} core studies: {SURVEY_CORPUS['analysis']} on analysis, "
+            f"{SURVEY_CORPUS['training']} on training, {SURVEY_CORPUS['architecture']} on architecture, and "
+            f"{SURVEY_CORPUS['inference']} on inference. This list holds {len(core)} studies under the survey's taxonomy: "
+            f"the {in_survey} core studies and contextual methods the survey discusses, and {len(core) - in_survey} more from "
+            f"the same screening. By first arXiv posting, {years['2026']} are from 2026, {years['2025']} from 2025, "
+            f"{years['2024']} from 2024, and {earlier} are earlier foundations."
         ),
         "",
         "Progress in LLM reasoning is commonly measured on benchmarks that stay close to the training distribution. This "
-        "list collects work on whether the reasoning procedures that large language models acquire still hold when "
-        "notation, problem structure, length, difficulty, domain, language, or tool interface changes, and on what "
-        "training, inference, and architecture contribute to that transfer. The companion text is in [survey.md](survey.md).",
+        "list collects work on the question the survey asks: when and how can large language models generalize their "
+        "reasoning beyond their training distributions, under changes in notation, problem structure, length, difficulty, "
+        "domain, language, or tool interface? The companion text is in [survey.md](survey.md), and the paper is in "
+        "[full_paper/](full_paper/).",
         "",
         "## Contents",
         "",
@@ -169,20 +178,21 @@ def build() -> str:
             "",
             "## Reading a Generalization Claim",
             "",
-            "A reasoning-generalization result can be interpreted only when four elements are explicit.",
+            "A reasoning-generalization result can be interpreted only when it states what the model has encountered, "
+            "what changes at test time, and which components remain fixed. Table 5 of the survey lists the minimum report.",
             "",
-            "| Element | Question |",
-            "| --- | --- |",
+            "| Field | Minimum report | Misreading prevented |",
+            "| --- | --- | --- |",
         ]
     )
-    lines.extend(f"| **{name}** | {question} |" for name, question in CLAIM_ELEMENTS)
+    lines.extend(f"| **{name}** | {report} | {misreading} |" for name, report, misreading in CLAIM_FIELDS)
     lines.extend(
         [
             "",
-            "Claims also differ in what is held fixed. *Model-level* generalization concerns the learned parameters under a "
-            "fixed decoding procedure; *procedure-level* generalization adds prompting, search, or another inference "
-            "algorithm; *system-level* generalization further adds retrievers, verifiers, memories, tools, and environments. "
-            "A tool-augmented system can solve longer problems even when the base model has not learned a length-general algorithm.",
+            "Gains enabled by prompting, search, verification, or memory need not hold for the model alone: a tool-augmented "
+            "system can solve longer problems even when the base model has not learned a length-general algorithm. Greedy "
+            "accuracy shows what a model produces reliably, large-pass@k accuracy what it can produce occasionally, and "
+            "verifier-selected accuracy what a larger system can recover.",
             "",
             "## Taxonomy",
             "",
@@ -201,7 +211,8 @@ def build() -> str:
             "The first three pillars are interventions, ordered by where they act: on parameters, on test-time computation "
             "with the parameters fixed, and on the model's computational structure. Training is organized by stage and, "
             "within each stage, by the component a method modifies. The fourth pillar separates behavioral, mechanistic, "
-            "and theoretical evidence. Each paper appears once, under its primary source of generalization.",
+            "and theoretical evidence. Each paper appears once, under its primary source of generalization; studies the "
+            "survey assigns to a branch as a whole, such as evidence on RL transfer, are listed before that branch's leaves.",
             "",
             "## Paper List",
             "",
@@ -212,6 +223,11 @@ def build() -> str:
         lines.extend([f"### {pillar.name}", "", f"*{pillar.question}*", ""])
         for section in pillar.sections:
             lines.extend([f"#### {section.name}", "", f"*{section.description}*", ""])
+            general = newest_first(by_leaf.get(f"{pillar.id}.{section.id}", []))
+            if general:
+                lines.extend([f"**{section.general_label}**", ""])
+                lines.extend(paper_item(row) for row in general)
+                lines.append("")
             for leaf in section.leaves:
                 papers = by_leaf.get(f"{pillar.id}.{section.id}.{leaf.id}", [])
                 lines.extend([f"##### {leaf.name}", "", f"> {leaf.description}", ""])

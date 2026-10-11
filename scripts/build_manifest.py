@@ -10,7 +10,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from taxonomy import leaf_index
+from taxonomy import leaf_index, section_index
 
 
 ATOM = "{http://www.w3.org/2005/Atom}"
@@ -93,8 +93,12 @@ def build_row(selected: dict[str, str], meta: dict[str, str]) -> dict[str, str]:
     else:
         year = int(paper_id[:2]) + 2000
     pillar = section = leaf = ""
-    if selected["taxonomy_id"]:
-        pillar_obj, section_obj, leaf_obj = leaf_index()[selected["taxonomy_id"]]
+    taxonomy_id = selected["taxonomy_id"]
+    if taxonomy_id in section_index():
+        pillar_obj, section_obj = section_index()[taxonomy_id]
+        pillar, section = pillar_obj.name, section_obj.name
+    elif taxonomy_id:
+        pillar_obj, section_obj, leaf_obj = leaf_index()[taxonomy_id]
         pillar, section, leaf = pillar_obj.name, section_obj.name, leaf_obj.name
         if selected["subgroup"] and selected["subgroup"] not in leaf_obj.subgroups:
             raise SystemExit(f"Unknown subgroup {selected['subgroup']!r} for {paper_id}")
