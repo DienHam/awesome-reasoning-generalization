@@ -1,4 +1,6 @@
-"""Taxonomy of the survey, shared by the README and figure builders.
+"""Taxonomy of the survey, used by the README and manifest builders.
+
+The taxonomy figure itself is taken from the paper (scripts/extract_taxonomy_figure.py).
 
 The structure follows Figure 1 and the section and paragraph headings of the survey (Sections 3-6).
 Each paper in ``data/paper_manifest.tsv`` points to a leaf through its ``taxonomy_id``

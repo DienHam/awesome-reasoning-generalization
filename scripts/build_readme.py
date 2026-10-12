@@ -208,6 +208,8 @@ def build() -> str:
             '  <a href="assets/main_taxonomy.pdf"><img src="assets/main_taxonomy.svg" width="100%" alt="Taxonomy of reasoning generalization in large language models"></a>',
             "</p>",
             "",
+            '<p align="center"><em>Figure 1 of the survey: taxonomy of reasoning generalization in LLMs, with representative works for each branch.</em></p>',
+            "",
             "The first three pillars are interventions, ordered by where they act: on parameters, on test-time computation "
             "with the parameters fixed, and on the model's computational structure. Training is organized by stage and, "
             "within each stage, by the component a method modifies. The fourth pillar separates behavioral, mechanistic, "
