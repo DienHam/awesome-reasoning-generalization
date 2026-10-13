@@ -13,7 +13,7 @@
 
 </div>
 
-> **Status:** Updated on 11 October 2026 to follow the complete version of the survey (literature search through 10 September 2026). The survey's corpus has 169 core studies: 88 on analysis, 46 on training, 21 on architecture, and 14 on inference. This list holds 239 studies under the survey's taxonomy: the 212 core studies and contextual methods the survey discusses, and 27 more from the same screening. By first arXiv posting, 112 are from 2026, 71 from 2025, 35 from 2024, and 21 are earlier foundations.
+> **Status:** Updated on 13 October 2026 to follow the complete version of the survey (literature search through 22 September 2026). The corpus version contains 239 studies, of which 173 are cited in the current survey: 72 on training, 24 on inference, 22 on architecture, and 55 on analysis. These counts include contextual methods as well as direct transfer evidence. The remaining 66 studies are retained in the catalogue. By first arXiv posting, 112 are from 2026, 71 from 2025, 35 from 2024, and 21 are earlier foundations.
 
 Progress in LLM reasoning is commonly measured on benchmarks that stay close to the training distribution. This list collects work on the question the survey asks: when and how can large language models generalize their reasoning beyond their training distributions, under changes in notation, problem structure, length, difficulty, domain, language, or tool interface? The companion text is in [survey.md](survey.md), and the paper is in [full_paper/](full_paper/).
 
@@ -65,7 +65,7 @@ Gains enabled by prompting, search, verification, or memory need not hold for th
 | Pillar | Central question | Branches |
 | --- | --- | --- |
 | **Training for Generalization** | How can parameter updates make a learned reasoning procedure survive shifts in form, composition, length, difficulty, domain, or language? | Pre-training, mid-training, and post-training (SFT, RL, hybrid) |
-| **Inference for Generalization** | How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping? | Trajectory restructuring, compute scaling, state assessment, externalization |
+| **Inference for Generalization** | How can test-time computation, verification, and adaptation support transfer to unfamiliar reasoning problems? | Trajectory restructuring, compute scaling, state assessment, externalization |
 | **Architecture for Generalization** | Which computational structures let a learned operation be reused when problems grow longer or combine familiar steps in new ways? | Recurrent depth, information routing, recurrent memory |
 | **Analysis of Generalization** | What actually transfers under distribution shift, and why? | Behavioral, mechanistic, and theoretical evidence |
 
@@ -284,7 +284,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 ### Inference for Generalization
 
-*How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping?*
+*How can test-time computation, verification, and adaptation support transfer to unfamiliar reasoning problems?*
 
 #### Trajectory Restructuring
 
@@ -464,7 +464,7 @@ The first three pillars are interventions, ordered by where they act: on paramet
 
 #### Behavioral Evidence
 
-*Performance under controlled shifts: one row of the transfer matrix, not a single OOD score.*
+*Performance under controlled shifts in composition, length, depth, difficulty, and prior exposure.*
 
 ##### Compositional Generalization
 

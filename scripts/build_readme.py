@@ -16,8 +16,8 @@ MANIFEST = ROOT / "data" / "paper_manifest.tsv"
 RESOURCES = ROOT / "data" / "resources.tsv"
 OUTPUT = ROOT / "README.md"
 
-UPDATED = "11 October 2026"
-SEARCH_DATE = "10 September 2026"
+UPDATED = "13 October 2026"
+SEARCH_DATE = "22 September 2026"
 MAX_AUTHORS = 12
 
 YEAR_BADGE_COLOR = {
@@ -34,9 +34,6 @@ CLAIM_FIELDS = [
     ("Outcome and evidence", "Performance with uncertainty, generalization gap when comparable, mechanism test if claimed", "Treating a probe, score change, or finite test range as stronger evidence than it provides"),
     ("Inference cost", "Samples, generated tokens, tool calls, wall time or FLOPs, and stopping rule", "Reporting an accuracy gain that follows only from unbounded extra computation"),
 ]
-
-# Corpus statistics reported in Appendix A of the survey (core studies only; contextual methods excluded).
-SURVEY_CORPUS = {"total": 169, "training": 46, "inference": 14, "architecture": 21, "analysis": 88}
 
 PILLAR_BRANCHES = {
     "training": "Pre-training, mid-training, and post-training (SFT, RL, hybrid)",
@@ -115,7 +112,9 @@ def build() -> str:
     resources = load(RESOURCES)
     core = [row for row in rows if row["role"] == "core"]
     surveys = [row for row in rows if row["role"] == "survey"]
-    in_survey = sum(row["in_survey"] == "yes" for row in core)
+    selected = [row for row in core if row["in_survey"] == "yes"]
+    in_survey = len(selected)
+    survey_by_pillar = Counter(row["taxonomy_id"].split(".")[0] for row in selected)
     years = Counter(row["published"][:4] for row in core)
     earlier = sum(count for year, count in years.items() if year < "2024")
 
@@ -145,11 +144,12 @@ def build() -> str:
         "",
         (
             f"> **Status:** Updated on {UPDATED} to follow the complete version of the survey (literature search through {SEARCH_DATE}). "
-            f"The survey's corpus has {SURVEY_CORPUS['total']} core studies: {SURVEY_CORPUS['analysis']} on analysis, "
-            f"{SURVEY_CORPUS['training']} on training, {SURVEY_CORPUS['architecture']} on architecture, and "
-            f"{SURVEY_CORPUS['inference']} on inference. This list holds {len(core)} studies under the survey's taxonomy: "
-            f"the {in_survey} core studies and contextual methods the survey discusses, and {len(core) - in_survey} more from "
-            f"the same screening. By first arXiv posting, {years['2026']} are from 2026, {years['2025']} from 2025, "
+            f"The corpus version contains {len(core)} studies, of which {in_survey} are cited in the current survey: "
+            f"{survey_by_pillar['training']} on training, {survey_by_pillar['inference']} on inference, "
+            f"{survey_by_pillar['architecture']} on architecture, and {survey_by_pillar['analysis']} on analysis. "
+            f"These counts include contextual methods as well as direct transfer evidence. The remaining "
+            f"{len(core) - in_survey} studies are retained in the catalogue. By first arXiv posting, "
+            f"{years['2026']} are from 2026, {years['2025']} from 2025, "
             f"{years['2024']} from 2024, and {earlier} are earlier foundations."
         ),
         "",

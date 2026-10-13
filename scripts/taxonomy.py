@@ -105,7 +105,7 @@ TAXONOMY: tuple[Pillar, ...] = (
     Pillar(
         "inference",
         "Inference for Generalization",
-        "How can a fixed model be applied to unfamiliar problems by changing computation at test time, and where does that stop helping?",
+        "How can test-time computation, verification, and adaptation support transfer to unfamiliar reasoning problems?",
         (
             Section(
                 "trajectory",
@@ -188,7 +188,7 @@ TAXONOMY: tuple[Pillar, ...] = (
             Section(
                 "behavioral",
                 "Behavioral Evidence",
-                "Performance under controlled shifts: one row of the transfer matrix, not a single OOD score.",
+                "Performance under controlled shifts in composition, length, depth, difficulty, and prior exposure.",
                 (
                     Leaf("composition", "Compositional Generalization", "Fixed primitives, new combinations: deeper and wider computation graphs, multi-hop chaining, and rule extrapolation."),
                     Leaf("length", "Length, Depth, and Difficulty", "Longer inputs, deeper nesting or planning horizons, and easy-to-hard transfer, which diverge even within one task."),

@@ -223,53 +223,34 @@ This work surveys publicly available research on reasoning generalization in LLM
 
 ## Appendix A. Literature Collection and Corpus
 
-### A.1 Search and Screening
+### A.1 Abstract-Based Retrieval
 
-We searched for work on reasoning generalization, OOD reasoning, systematic and compositional generalization, length and depth generalization, reasoning transfer, and test-time generalization. To find papers whose titles did not mention generalization, we also searched abstracts by pairing training-stage terms (pre-training, mid-training, SFT, distillation, RL, RLVR, and self-improvement) with terms such as transfer, unseen composition, symbolic variation, longer input, deeper proof, and OOD evaluation. We ran the queries separately for each submission period so that the much larger 2026 literature would not crowd out relevant work from 2024 and 2025. After deduplication, we screened 6,012 arXiv records ([`candidates.tsv`](data/candidates.tsv)) and checked related entries in the ACL Anthology and OpenReview. We read every retained abstract and consulted the full paper whenever the abstract did not state the evaluation split clearly.
+We searched arXiv abstracts for literature available by 22 September 2026, using terms such as "reasoning generalization", "reasoning transfer", "OOD reasoning", "compositional generalization", "systematic generalization", and "length generalization". Supplementary searches used "post-training", "SFT", "GRPO", "RLVR", and "reward" to broaden coverage of training methods. We also checked relevant papers in ACL Anthology and OpenReview.
 
-We included a core study when it specified the reasoning task, the relevant reference exposure, the test-time shift, and evidence of transfer or failure. Reference exposure may concern model training, in-context demonstrations, or data used to fit an inference component such as a verifier. We excluded work that reported only an average improvement in reasoning scores, broad robustness studies in which reasoning was one of many unrelated capabilities, model-to-model transfer without a shift to unfamiliar problems, and expressivity results without a generalization claim. When a paper used the term "generalization" without stating what changed between reference and target conditions, we examined its experimental setup and data construction before deciding whether to include it. We also discuss contextual methods that explain the design space but do not meet this rule; these are excluded from the core counts.
+### A.2 Screening and Corpus Construction
 
-### A.2 Corpus Composition
+After deduplication, we screened abstracts and consulted full papers for studies of reasoning transfer, its mechanisms, or theoretical limits. Empirical transfer claims had to specify the reasoning task, reference exposure, and test shift; benchmark gains alone were insufficient. We excluded unrelated robustness or model-to-model transfer studies, while retaining relevant methods without direct transfer evidence as context. The *corpus version* contains 239 studies across the four pillars, of which 173 form the *survey version*, covering the main text, taxonomy, and appendix evidence. Each paper is counted once under its primary pillar; background, survey, and dataset-only references are excluded. [Figure 4](assets/corpus.pdf) and Table 1 summarize both versions.
 
-The corpus contains 169 core studies, each counted once under its primary pillar (Table 1). Analysis is the largest pillar with 88 studies, followed by training with 46 (38 of them on post-training), architecture with 21, and inference with 14. Most studies (130) first appeared in 2025 or 2026, reflecting the recent growth of the area, although many results remain preprints.
+![Corpus and survey studies by primary pillar](assets/corpus.png)
 
-The inference count covers the 13 studies marked as core in Table 15 and test-time hinting ([Hou et al., 2026](https://arxiv.org/abs/2605.16410)), which evaluates transfer to unseen benchmarks. The other 11 entries in the evidence table are contextual methods with indirect or absent shift evidence, including DaC, Self-Discover, compute-optimal scaling, and TTEL; they are excluded from the core counts. Two related scaling studies ([Li et al., 2026a](https://arxiv.org/abs/2605.09853); [Chaudhry et al., 2026](https://arxiv.org/abs/2604.01430)) are counted under training, as their interventions update model parameters. Thus, the number of methods discussed in the inference pillar exceeds its core-study count without counting a study twice.
+*Figure 4: The corpus version (239 studies) and the author-selected survey version (173 studies), by primary pillar. Each paper is counted once.*
 
-Figure 1 shows representative works for each branch, including contextual methods. Table 2 lists additional core studies that the main text does not discuss, under their primary branch. Related surveys and contextual studies are excluded from the corpus counts.
+*Table 1: Catalogue and survey studies by primary pillar and first-posting year. Venue year is used for records without an arXiv version.*
 
-*Table 1: Core-study counts by primary pillar and first arXiv year. Counts describe the reviewed corpus, not the strength of evidence in each category.*
+| Pillar | Version | 2023 and earlier | 2024 | 2025 | 2026 | Total |
+| --- | --- | --- | --- | --- | --- | --- |
+| Training | Corpus | 0 | 5 | 42 | 51 | 98 |
+| Training | Survey | 0 | 4 | 33 | 35 | 72 |
+| Inference | Corpus | 2 | 7 | 9 | 7 | 25 |
+| Inference | Survey | 2 | 7 | 9 | 6 | 24 |
+| Architecture | Corpus | 6 | 7 | 5 | 22 | 40 |
+| Architecture | Survey | 4 | 6 | 3 | 9 | 22 |
+| Analysis | Corpus | 13 | 16 | 15 | 32 | 76 |
+| Analysis | Survey | 10 | 10 | 12 | 23 | 55 |
+| **Total** | Corpus | 21 | 35 | 71 | 112 | 239 |
+| **Total** | Survey | 16 | 27 | 57 | 73 | 173 |
 
-| Primary pillar | 2023 and earlier | 2024 | 2025 | 2026 | Total (share) |
-| --- | --- | --- | --- | --- | --- |
-| Training | 0 | 0 | 13 | 33 | 46 (27.2%) |
-| Inference | 2 | 4 | 5 | 3 | 14 (8.3%) |
-| Architecture | 1 | 4 | 3 | 13 | 21 (12.4%) |
-| Analysis | 12 | 16 | 24 | 36 | 88 (52.1%) |
-| **Total** | **15** | **24** | **45** | **85** | **169 (100%)** |
-
-*Table 2: Core studies that the main text does not discuss, grouped by the branch of Figure 1 to which we assign them.*
-
-| Branch | Core studies |
-| --- | --- |
-| *Training (Section 3) and inference (Section 4)* | |
-| Mid-training | [Mehta et al., 2026](https://arxiv.org/abs/2606.23687) |
-| Reinforcement learning | [Yuan et al., 2025](https://arxiv.org/abs/2509.25123); [Li et al., 2026a](https://arxiv.org/abs/2605.09853); [Chaudhry et al., 2026](https://arxiv.org/abs/2604.01430) |
-| Trajectory restructuring | [Hou et al., 2026](https://arxiv.org/abs/2605.16410) |
-| *Architecture (Section 5)* | |
-| Recurrent depth: weight sharing | [Chen, 2026](https://arxiv.org/abs/2603.21676); [Yu et al., 2026](https://arxiv.org/abs/2502.08482) |
-| Recurrent depth: adaptive computation and stability | [Abnar et al., 2023](https://arxiv.org/abs/2310.08866); [Kuo et al., 2026](https://arxiv.org/abs/2606.29983); [Ibrahimli et al., 2026](https://openreview.net/forum?id=XW18V4H9sq); [Huang et al., 2026a](https://arxiv.org/abs/2605.21488); [Labovich, 2026](https://arxiv.org/abs/2604.15259); [Movahedi et al., 2026](https://arxiv.org/abs/2606.18206) |
-| Information routing: positional encoding and locality | [Wu et al., 2026](https://arxiv.org/abs/2607.07678); [Shimizu et al., 2026](https://arxiv.org/abs/2602.14050); [Madan et al., 2026](https://arxiv.org/abs/2607.09061) |
-| Information routing: modular and neuro-symbolic | [Kamali et al., 2025](https://arxiv.org/abs/2412.15588); [Shahid and Rothe, 2026](https://arxiv.org/abs/2604.26522); [Oarga and Du, 2025](https://arxiv.org/abs/2510.20607) |
-| Recurrent memory | [Xu et al., 2026a](https://arxiv.org/abs/2604.25166); [Takashiro et al., 2026](https://arxiv.org/abs/2604.01577) |
-| *Analysis (Section 6)* | |
-| Compositional generalization | [Saparov and He, 2023](https://arxiv.org/abs/2305.15269); [Fu and Frank, 2024b](https://arxiv.org/abs/2410.06272) |
-| Length, depth, and difficulty | [Ding et al., 2024](https://arxiv.org/abs/2409.18433); [Stechly et al., 2024](https://arxiv.org/abs/2405.04776); [Zheng et al., 2024](https://arxiv.org/abs/2406.04520); [Shojaee et al., 2025](https://arxiv.org/abs/2506.06941); [Ye et al., 2025a](https://arxiv.org/abs/2407.20311) |
-| Prior exposure | [McCoy et al., 2024](https://arxiv.org/abs/2309.13638); [Chi et al., 2024](https://arxiv.org/abs/2406.17038); [Shelat et al., 2026](https://arxiv.org/abs/2601.13392) |
-| Shared circuits | [Zhang et al., 2025c](https://arxiv.org/abs/2502.20129); [Yao et al., 2025a](https://arxiv.org/abs/2502.04667) |
-| Learning dynamics | [Nanda et al., 2023](https://arxiv.org/abs/2301.05217); [Xu, 2026](https://arxiv.org/abs/2602.16967); [Shi et al., 2026](https://arxiv.org/abs/2604.25011) |
-| Learnability and certification | [Guan and Bradic, 2026](https://arxiv.org/abs/2605.07120); [Zetzsche et al., 2026](https://arxiv.org/abs/2609.08851) |
-
-**Repository files.** The paper list in the README contains every study discussed in this survey under its branch, including contextual methods, together with 27 studies from the same screening that this version does not discuss (239 studies in total). The manifest [`paper_manifest.tsv`](data/paper_manifest.tsv) records the title, authors, abstract, dates, taxonomy label, and inclusion note of all 254 entries, [`excluded_papers.tsv`](data/excluded_papers.tsv) records 16 near-boundary exclusions with reasons, and [`resources.tsv`](data/resources.tsv) lists the datasets and benchmarks of Appendix C.
+**Repository files.** The catalogue retains all 239 four-pillar studies, including 173 cited in the current survey and 66 additional studies. The manifest [`paper_manifest.tsv`](data/paper_manifest.tsv) records metadata and survey-selection flags for these studies, ten background references, and five related surveys. [`excluded_papers.tsv`](data/excluded_papers.tsv) records screening exclusions, and [`resources.tsv`](data/resources.tsv) lists datasets and benchmarks.
 
 ## Appendix B. Synthesis and Evaluation Framework
 
